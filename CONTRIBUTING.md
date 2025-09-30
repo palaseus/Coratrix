@@ -1,195 +1,184 @@
-# Contributing to Coratrix
+# Contributing to Coratrix 3.1
 
-Thank you for your interest in contributing to Coratrix! This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to Coratrix! This guide will help you get started with contributing to the modular quantum computing SDK.
 
 ## Table of Contents
 
-1. [Code of Conduct](#code-of-conduct)
-2. [Getting Started](#getting-started)
-3. [Development Setup](#development-setup)
-4. [Contributing Guidelines](#contributing-guidelines)
-5. [Code Style and Standards](#code-style-and-standards)
-6. [Testing](#testing)
-7. [Documentation](#documentation)
-8. [Pull Request Process](#pull-request-process)
-9. [Issue Reporting](#issue-reporting)
-10. [Community Guidelines](#community-guidelines)
+- [Code of Conduct](#code-of-conduct)
+- [Getting Started](#getting-started)
+- [Development Setup](#development-setup)
+- [Contributing Guidelines](#contributing-guidelines)
+- [Plugin Development](#plugin-development)
+- [Testing](#testing)
+- [Documentation](#documentation)
+- [Pull Request Process](#pull-request-process)
+- [Issue Templates](#issue-templates)
 
 ## Code of Conduct
 
-This project follows the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct.html). By participating, you agree to uphold this code.
-
-### Our Pledge
-
-We pledge to make participation in our project a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
-
-### Our Standards
-
-Examples of behavior that contributes to a positive environment include:
-
-- Using welcoming and inclusive language
-- Being respectful of differing viewpoints and experiences
-- Gracefully accepting constructive criticism
-- Focusing on what is best for the community
-- Showing empathy towards other community members
+This project follows the [Contributor Covenant](https://www.contributor-covenant.org/) code of conduct. By participating, you agree to uphold this code.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Python 3.10 or higher
+- Python 3.8 or higher
 - Git
-- Basic understanding of quantum computing concepts
+- Basic understanding of quantum computing
 - Familiarity with Python development
 
-### Fork and Clone
+### Development Setup
 
-1. Fork the repository on GitHub
-2. Clone your fork locally:
+1. **Fork and Clone**
    ```bash
-   git clone https://github.com/your-username/coratrix.git
-   cd coratrix
-   ```
-3. Add the upstream repository:
-   ```bash
-   git remote add upstream https://github.com/coratrix/coratrix.git
+   git clone https://github.com/your-username/Coratrix.git
+   cd Coratrix
    ```
 
-## Development Setup
+2. **Create Virtual Environment**
+   ```bash
+   python -m venv coratrix_env
+   source coratrix_env/bin/activate  # On Windows: coratrix_env\Scripts\activate
+   ```
 
-### 1. Create a Virtual Environment
+3. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   pip install -r requirements-dev.txt  # Development dependencies
+   ```
 
-```bash
-# Using venv
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+4. **Install in Development Mode**
+   ```bash
+   pip install -e .
+   ```
 
-# Or using conda
-conda create -n coratrix python=3.10
-conda activate coratrix
-```
-
-### 2. Install Dependencies
-
-```bash
-# Install development dependencies
-pip install -r requirements.txt
-
-# Install additional development tools
-pip install pytest pytest-cov black flake8 mypy sphinx
-```
-
-### 3. Install in Development Mode
-
-```bash
-pip install -e .
-```
-
-### 4. Run Tests
-
-```bash
-# Run all tests
-python -m pytest tests/
-
-# Run with coverage
-python -m pytest tests/ --cov=coratrix --cov-report=html
-
-# Run specific test file
-python -m pytest tests/test_quantum_state.py
-```
+5. **Run Tests**
+   ```bash
+   python -m pytest tests/ -v
+   ```
 
 ## Contributing Guidelines
 
 ### Types of Contributions
 
-We welcome various types of contributions:
+We welcome several types of contributions:
 
-1. **Bug Fixes**: Fix existing issues
-2. **Feature Additions**: Add new functionality
-3. **Documentation**: Improve documentation
-4. **Tests**: Add or improve tests
-5. **Performance**: Optimize existing code
-6. **Examples**: Add usage examples
-7. **Tutorials**: Create educational content
+#### 🐛 Bug Reports
+- Use the bug report template
+- Include steps to reproduce
+- Provide system information
+- Attach relevant logs
 
-### Contribution Process
+#### ✨ Feature Requests
+- Use the feature request template
+- Describe the use case
+- Explain the expected behavior
+- Consider implementation complexity
 
-1. **Check Existing Issues**: Look for existing issues or discussions
-2. **Create an Issue**: If proposing a new feature, create an issue first
-3. **Fork and Branch**: Create a feature branch from `main`
-4. **Develop**: Implement your changes
-5. **Test**: Ensure all tests pass
-6. **Document**: Update documentation as needed
-7. **Submit**: Create a pull request
+#### 📚 Documentation Improvements
+- Fix typos and grammar
+- Improve clarity and examples
+- Add missing information
+- Update outdated content
 
-### Branch Naming
+#### 🔧 Code Contributions
+- Bug fixes
+- New features
+- Performance improvements
+- Test coverage
 
-Use descriptive branch names:
+#### 🔌 Plugin Development
+- Custom compiler passes
+- New backend implementations
+- DSL extensions
+- Target generators
 
-- `feature/quantum-algorithm-x`
-- `bugfix/fix-measurement-issue`
-- `docs/update-api-reference`
-- `test/add-unit-tests`
-- `perf/optimize-gpu-operations`
+### Development Workflow
 
-## Code Style and Standards
+1. **Create Feature Branch**
+   ```bash
+   git checkout -b feature/your-feature-name
+   # or
+   git checkout -b bugfix/issue-number
+   ```
 
-### Python Style
+2. **Make Changes**
+   - Write clean, readable code
+   - Follow existing code style
+   - Add appropriate comments
+   - Update documentation
 
-We follow PEP 8 with some modifications:
+3. **Test Your Changes**
+   ```bash
+   # Run all tests
+   python -m pytest tests/ -v
+   
+   # Run specific test file
+   python -m pytest tests/test_your_feature.py -v
+   
+   # Run with coverage
+   python -m pytest tests/ --cov=coratrix --cov-report=html
+   ```
 
-```python
-# Use 4 spaces for indentation
-def function_name(parameter1: int, parameter2: str) -> bool:
-    """Function docstring."""
-    if parameter1 > 0:
-        return True
-    return False
+4. **Commit Changes**
+   ```bash
+   git add .
+   git commit -m "feat: add your feature description"
+   ```
 
-# Use type hints
-from typing import List, Dict, Optional, Union
+5. **Push and Create PR**
+   ```bash
+   git push origin feature/your-feature-name
+   ```
 
-def process_quantum_state(
-    state: QuantumState,
-    gates: List[QuantumGate],
-    parameters: Optional[Dict[str, float]] = None
-) -> Dict[str, Any]:
-    """Process quantum state with gates."""
-    pass
-```
+## Plugin Development
 
-### Code Formatting
+### Creating a New Plugin
 
-We use Black for code formatting:
+1. **Choose Plugin Type**
+   - `CompilerPassPlugin`: Custom optimization passes
+   - `BackendPlugin`: New quantum backends
+   - `DSLExtensionPlugin`: Language extensions
+   - `TargetGeneratorPlugin`: New target formats
 
-```bash
-# Format code
-black coratrix/ tests/
+2. **Implement Plugin Interface**
+   ```python
+   from coratrix.plugins import CompilerPassPlugin, PluginInfo
+   
+   class MyCustomPlugin(CompilerPassPlugin):
+       def __init__(self):
+           super().__init__(
+               info=PluginInfo(
+                   name='my_custom_plugin',
+                   version='1.0.0',
+                   description='My custom plugin',
+                   author='Your Name',
+                   plugin_type='compiler_pass',
+                   dependencies=[]
+               )
+           )
+   ```
 
-# Check formatting
-black --check coratrix/ tests/
-```
+3. **Add Tests**
+   ```python
+   def test_my_custom_plugin():
+       plugin = MyCustomPlugin()
+       assert plugin.initialize()
+       assert plugin.is_enabled()
+   ```
 
-### Linting
+4. **Document Usage**
+   - Add examples to documentation
+   - Include in plugin development guide
+   - Provide usage examples
 
-We use flake8 for linting:
+### Plugin Best Practices
 
-```bash
-# Run linter
-flake8 coratrix/ tests/
-
-# With configuration
-flake8 --config=.flake8 coratrix/ tests/
-```
-
-### Type Checking
-
-We use mypy for type checking:
-
-```bash
-# Run type checker
-mypy coratrix/
-```
+- **Single Responsibility**: Each plugin should have one clear purpose
+- **Error Handling**: Implement robust error handling
+- **Dependencies**: Minimize external dependencies
+- **Testing**: Write comprehensive tests
+- **Documentation**: Provide clear documentation
 
 ## Testing
 
@@ -197,148 +186,103 @@ mypy coratrix/
 
 ```
 tests/
-├── test_quantum_state.py
-├── test_quantum_gates.py
-├── test_circuit.py
-├── test_scalable_quantum_state.py
-├── test_noise_models.py
-├── test_optimization_engine.py
-├── test_multi_subspace_grover.py
-├── test_reproducibility.py
-├── test_hardware_interface.py
-├── test_advanced_algorithms.py
-├── test_unitary_consistency.py
-├── test_property_based.py
-├── test_circuit_fidelity.py
-└── test_correctness_suite.py
+├── test_core/              # Core simulation tests
+├── test_compiler/          # Compiler stack tests
+├── test_backend/           # Backend management tests
+├── test_plugins/           # Plugin system tests
+├── test_cli/               # CLI tests
+├── test_integration/       # Integration tests
+└── test_performance/       # Performance tests
 ```
 
 ### Writing Tests
 
-```python
-import unittest
-import numpy as np
-from coratrix import QuantumState, HGate, CNOTGate
+1. **Unit Tests**
+   ```python
+   def test_quantum_state_creation():
+       state = ScalableQuantumState(2)
+       assert state.num_qubits == 2
+       assert state.get_amplitude(0) == 1.0
+   ```
 
-class TestQuantumState(unittest.TestCase):
-    """Test cases for QuantumState."""
-    
-    def setUp(self):
-        """Set up test fixtures."""
-        self.state = QuantumState(2)
-    
-    def test_initialization(self):
-        """Test quantum state initialization."""
-        self.assertEqual(self.state.num_qubits, 2)
-        self.assertEqual(self.state.dimension, 4)
-    
-    def test_bell_state_creation(self):
-        """Test creating a Bell state."""
-        # Create Bell state
-        self.state.set_amplitude(0, 1.0/np.sqrt(2))
-        self.state.set_amplitude(3, 1.0/np.sqrt(2))
-        self.state.normalize()
-        
-        # Check normalization
-        probabilities = self.state.get_probabilities()
-        self.assertAlmostEqual(sum(probabilities), 1.0, places=10)
-        
-        # Check Bell state properties
-        self.assertAlmostEqual(probabilities[0], 0.5, places=10)
-        self.assertAlmostEqual(probabilities[3], 0.5, places=10)
-```
+2. **Integration Tests**
+   ```python
+   def test_full_compilation_pipeline():
+       dsl_source = "circuit test() { h q0; }"
+       compiler = CoratrixCompiler()
+       result = compiler.compile(dsl_source, options)
+       assert result.success
+   ```
 
-### Test Requirements
+3. **Performance Tests**
+   ```python
+   def test_large_system_performance():
+       state = ScalableQuantumState(15, use_sparse=True)
+       # Measure performance metrics
+   ```
 
-1. **Unit Tests**: Test individual functions and methods
-2. **Integration Tests**: Test component interactions
-3. **Property-Based Tests**: Use Hypothesis for random testing
-4. **Performance Tests**: Benchmark critical operations
-5. **Regression Tests**: Prevent previously fixed bugs
+### Test Guidelines
 
-### Running Tests
-
-```bash
-# Run all tests
-python -m pytest tests/
-
-# Run with verbose output
-python -m pytest tests/ -v
-
-# Run specific test
-python -m pytest tests/test_quantum_state.py::TestQuantumState::test_initialization
-
-# Run with coverage
-python -m pytest tests/ --cov=coratrix --cov-report=html
-
-# Run property-based tests
-python -m pytest tests/test_property_based.py
-```
+- **Coverage**: Aim for >90% test coverage
+- **Naming**: Use descriptive test names
+- **Isolation**: Tests should be independent
+- **Speed**: Keep unit tests fast
+- **Documentation**: Document complex test scenarios
 
 ## Documentation
 
 ### Documentation Standards
 
-1. **Docstrings**: Use Google-style docstrings
-2. **Type Hints**: Include type annotations
-3. **Examples**: Provide usage examples
-4. **API Reference**: Document all public APIs
-5. **Tutorials**: Create educational content
+- **Clarity**: Write for your target audience
+- **Examples**: Include practical examples
+- **Accuracy**: Keep documentation up-to-date
+- **Structure**: Follow existing documentation patterns
 
-### Docstring Format
+### Documentation Types
 
-```python
-def quantum_algorithm(
-    state: QuantumState,
-    parameters: Dict[str, float],
-    iterations: int = 100
-) -> Dict[str, Any]:
-    """
-    Apply quantum algorithm to state.
-    
-    Args:
-        state: Quantum state to process
-        parameters: Algorithm parameters
-        iterations: Number of iterations to run
-        
-    Returns:
-        Dictionary containing results and metrics
-        
-    Raises:
-        ValueError: If parameters are invalid
-        RuntimeError: If algorithm fails to converge
-        
-    Example:
-        >>> state = QuantumState(2)
-        >>> params = {"theta": 0.5, "phi": 1.0}
-        >>> result = quantum_algorithm(state, params, iterations=50)
-        >>> print(f"Success: {result['success']}")
-    """
-    pass
-```
+1. **API Documentation**
+   - Docstrings for all public methods
+   - Type hints for parameters
+   - Return value descriptions
+   - Usage examples
 
-### Building Documentation
+2. **User Guides**
+   - Step-by-step tutorials
+   - Common use cases
+   - Troubleshooting guides
+   - Best practices
 
-```bash
-# Build Sphinx documentation
-cd docs/
-sphinx-build -b html . _build/html
+3. **Developer Documentation**
+   - Architecture overview
+   - Plugin development
+   - Testing guidelines
+   - Contributing process
 
-# View documentation
-open _build/html/index.html
-```
+### Updating Documentation
+
+1. **API Changes**: Update docstrings and type hints
+2. **New Features**: Add to relevant guides
+3. **Bug Fixes**: Update troubleshooting sections
+4. **Examples**: Test all code examples
 
 ## Pull Request Process
 
 ### Before Submitting
 
-1. **Update Documentation**: Update relevant documentation
-2. **Add Tests**: Add tests for new functionality
-3. **Run Tests**: Ensure all tests pass
-4. **Check Style**: Run code formatting and linting
-5. **Update Changelog**: Add entry to CHANGELOG.md
+1. **Checklist**
+   - [ ] Code follows style guidelines
+   - [ ] Tests pass locally
+   - [ ] Documentation updated
+   - [ ] No merge conflicts
+   - [ ] Commit messages are clear
 
-### Pull Request Template
+2. **Code Review**
+   - Self-review your changes
+   - Test thoroughly
+   - Check for edge cases
+   - Verify performance impact
+
+### PR Template
 
 ```markdown
 ## Description
@@ -351,165 +295,217 @@ Brief description of changes
 - [ ] Documentation update
 
 ## Testing
-- [ ] Tests pass locally
-- [ ] New tests added
-- [ ] Coverage maintained
+- [ ] Unit tests pass
+- [ ] Integration tests pass
+- [ ] Manual testing completed
 
 ## Checklist
 - [ ] Code follows style guidelines
 - [ ] Self-review completed
 - [ ] Documentation updated
-- [ ] Changelog updated
+- [ ] No breaking changes (or documented)
 ```
 
 ### Review Process
 
-1. **Automated Checks**: CI/CD pipeline runs tests
-2. **Code Review**: Maintainers review code
-3. **Feedback**: Address review comments
-4. **Approval**: Maintainer approves PR
-5. **Merge**: PR is merged to main branch
+1. **Automated Checks**
+   - Tests must pass
+   - Code style checks
+   - Documentation builds
+   - Performance benchmarks
 
-## Issue Reporting
+2. **Human Review**
+   - Code quality review
+   - Architecture review
+   - Documentation review
+   - Security review
 
-### Bug Reports
+3. **Approval**
+   - At least one approval required
+   - All checks must pass
+   - No outstanding discussions
 
-When reporting bugs, include:
+## Issue Templates
 
-1. **Description**: Clear description of the issue
-2. **Steps to Reproduce**: Detailed reproduction steps
-3. **Expected Behavior**: What should happen
-4. **Actual Behavior**: What actually happens
-5. **Environment**: System information
-6. **Code Sample**: Minimal code to reproduce
+### Bug Report Template
 
-### Feature Requests
+```markdown
+**Describe the bug**
+A clear description of what the bug is.
 
-When requesting features, include:
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Go to '...'
+2. Click on '....'
+3. See error
 
-1. **Use Case**: Why this feature is needed
-2. **Proposed Solution**: How you envision it working
-3. **Alternatives**: Other approaches considered
-4. **Additional Context**: Any other relevant information
+**Expected behavior**
+What you expected to happen.
 
-### Issue Templates
+**Screenshots**
+If applicable, add screenshots.
 
-Use the provided issue templates:
-- Bug report template
-- Feature request template
-- Question template
+**System Information**
+- OS: [e.g. Ubuntu 20.04]
+- Python version: [e.g. 3.9.0]
+- Coratrix version: [e.g. 3.1.0]
+
+**Additional context**
+Any other context about the problem.
+```
+
+### Feature Request Template
+
+```markdown
+**Is your feature request related to a problem?**
+A clear description of what the problem is.
+
+**Describe the solution you'd like**
+A clear description of what you want to happen.
+
+**Describe alternatives you've considered**
+Any alternative solutions or workarounds.
+
+**Additional context**
+Any other context about the feature request.
+```
+
+## Development Environment
+
+### Recommended Tools
+
+- **IDE**: VS Code with Python extension
+- **Linting**: flake8, black, mypy
+- **Testing**: pytest, pytest-cov
+- **Documentation**: Sphinx, mkdocs
+
+### VS Code Configuration
+
+```json
+{
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.formatting.provider": "black",
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false
+}
+```
+
+### Pre-commit Hooks
+
+```yaml
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+      - id: black
+  - repo: https://github.com/pycqa/flake8
+    rev: 4.0.1
+    hooks:
+      - id: flake8
+```
+
+## Performance Guidelines
+
+### Code Performance
+
+- **Efficient Algorithms**: Use appropriate data structures
+- **Memory Management**: Avoid memory leaks
+- **GPU Utilization**: Leverage GPU when available
+- **Caching**: Cache expensive computations
+
+### Testing Performance
+
+- **Benchmark Tests**: Include performance benchmarks
+- **Memory Profiling**: Monitor memory usage
+- **Scalability**: Test with large systems
+- **Regression**: Prevent performance regressions
+
+## Security Guidelines
+
+### Code Security
+
+- **Input Validation**: Validate all inputs
+- **Error Handling**: Don't expose sensitive information
+- **Dependencies**: Keep dependencies updated
+- **Secrets**: Never commit secrets
+
+### Plugin Security
+
+- **Sandboxing**: Isolate plugin execution
+- **Permissions**: Limit plugin capabilities
+- **Validation**: Validate plugin code
+- **Auditing**: Audit plugin behavior
+
+## Release Process
+
+### Version Numbering
+
+- **Major**: Breaking changes
+- **Minor**: New features
+- **Patch**: Bug fixes
+
+### Release Checklist
+
+1. **Code Quality**
+   - All tests pass
+   - Code coverage maintained
+   - Documentation updated
+   - Performance benchmarks pass
+
+2. **Documentation**
+   - Changelog updated
+   - Release notes prepared
+   - Migration guide updated
+   - API documentation current
+
+3. **Distribution**
+   - PyPI package prepared
+   - Docker images built
+   - Documentation deployed
+   - Announcements prepared
 
 ## Community Guidelines
 
 ### Communication
 
-1. **Be Respectful**: Treat everyone with respect
-2. **Be Constructive**: Provide helpful feedback
-3. **Be Patient**: Allow time for responses
-4. **Be Clear**: Communicate clearly and concisely
+- **Be Respectful**: Treat everyone with respect
+- **Be Constructive**: Provide helpful feedback
+- **Be Patient**: Allow time for responses
+- **Be Clear**: Communicate clearly
 
 ### Getting Help
 
-1. **Documentation**: Check existing documentation
-2. **Issues**: Search existing issues
-3. **Discussions**: Use GitHub Discussions
-4. **Email**: Contact maintainers directly
+- **Documentation**: Check documentation first
+- **Issues**: Search existing issues
+- **Discussions**: Use GitHub discussions
+- **Community**: Join our community channels
 
-### Recognition
+## Recognition
 
-Contributors are recognized in:
-- CONTRIBUTORS.md file
-- Release notes
-- Project documentation
-- Community acknowledgments
+### Contributors
 
-## Development Workflow
+We recognize all contributors:
+- **Code Contributors**: Listed in contributors
+- **Documentation**: Acknowledged in docs
+- **Bug Reports**: Listed in changelog
+- **Community**: Featured in community highlights
 
-### Daily Workflow
+### Contribution Levels
 
-1. **Sync**: Pull latest changes from upstream
-2. **Branch**: Create feature branch
-3. **Develop**: Implement changes
-4. **Test**: Run tests locally
-5. **Commit**: Commit changes with clear messages
-6. **Push**: Push to your fork
-7. **PR**: Create pull request
+- **First-time Contributors**: Special recognition
+- **Regular Contributors**: Maintainer consideration
+- **Core Contributors**: Project leadership
+- **Community Leaders**: Ambassadorship
 
-### Commit Messages
+## Questions?
 
-Use clear, descriptive commit messages:
+If you have questions about contributing:
 
-```
-feat: add multi-subspace Grover search
-fix: resolve measurement normalization issue
-docs: update API reference for optimization engine
-test: add property-based tests for quantum gates
-perf: optimize GPU memory usage in scalable state
-```
-
-### Release Process
-
-1. **Version Bump**: Update version numbers
-2. **Changelog**: Update CHANGELOG.md
-3. **Tests**: Ensure all tests pass
-4. **Documentation**: Update documentation
-5. **Release**: Create GitHub release
-6. **Distribution**: Publish to PyPI
-
-## Advanced Topics
-
-### Performance Optimization
-
-1. **Profiling**: Use profiling tools
-2. **Benchmarking**: Create benchmarks
-3. **Memory Usage**: Monitor memory consumption
-4. **GPU Utilization**: Optimize GPU usage
-5. **Parallel Processing**: Use multiprocessing
-
-### Security Considerations
-
-1. **Input Validation**: Validate all inputs
-2. **Error Handling**: Handle errors gracefully
-3. **Data Privacy**: Protect sensitive data
-4. **Reproducibility**: Ensure deterministic behavior
-5. **Audit Trail**: Maintain operation logs
-
-### Internationalization
-
-1. **Documentation**: Support multiple languages
-2. **Error Messages**: Localize error messages
-3. **User Interface**: Support different locales
-4. **Cultural Sensitivity**: Consider cultural differences
-
-## Resources
-
-### Documentation
-
-- [API Reference](docs/API_REFERENCE.md)
-- [Installation Guide](docs/INSTALLATION.md)
-- [Examples](examples/)
-- [Tutorials](tutorials/)
-
-### External Resources
-
-- [Quantum Computing Concepts](https://qiskit.org/textbook/)
-- [Python Development](https://docs.python.org/3/)
-- [Git Workflow](https://git-scm.com/docs)
-- [Testing Best Practices](https://docs.pytest.org/)
-
-### Community
-
-- [GitHub Discussions](https://github.com/coratrix/coratrix/discussions)
-- [Discord Server](https://discord.gg/coratrix)
-- [Mailing List](https://groups.google.com/forum/#!forum/coratrix)
-- [Twitter](https://twitter.com/coratrix)
-
-## Contact
-
-For questions about contributing:
-
-- **Email**: [contributors@coratrix.org](mailto:contributors@coratrix.org)
-- **GitHub**: [@coratrix/coratrix](https://github.com/coratrix/coratrix)
-- **Discord**: [Coratrix Community](https://discord.gg/coratrix)
+1. **Check Documentation**: Review existing guides
+2. **Search Issues**: Look for similar questions
+3. **Start Discussion**: Create a GitHub discussion
+4. **Contact Maintainers**: Reach out directly
 
 Thank you for contributing to Coratrix! 🚀

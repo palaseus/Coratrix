@@ -72,6 +72,12 @@ Coratrix is a modular, production-ready quantum computing SDK with clear archite
 - **Performance Monitoring**: Real-time metrics including GPU memory usage and operations per second
 - **Benchmarking Suite**: Comprehensive performance testing across different configurations
 
+#### Performance Metrics Explained
+- **Grover's Algorithm Success Rate (94.5%)**: Probability of finding the target item in Grover's search. Theoretical maximum is ~100% with optimal iterations. 94.5% indicates excellent performance with minimal noise. See [Performance Benchmarks](docs/PERFORMANCE_BENCHMARKS.md) for detailed analysis.
+- **Entropy Optimization (99.08%)**: Measures quantum coherence maintenance during computation. 99.08% indicates minimal information loss, critical for quantum error correction. See [Quantum Algorithms](docs/QUANTUM_ALGORITHMS.md) for implementation details.
+- **Fidelity Benchmarks**: Bell state (99.99%), GHZ state (99.95%), Teleportation (99.8%) - near-perfect state preparation and quantum communication.
+- **Performance Scaling**: 2-qubit (<1ms), 5-qubit (~10ms), 10-qubit (~1s), 15-qubit (~1min) - real-time to research-grade performance.
+
 ###  Advanced Quantum Algorithms
 - **State Tomography**: Complete quantum state reconstruction from measurements
 - **Fidelity Estimation**: High-precision fidelity calculation between quantum states
@@ -743,9 +749,15 @@ report = generator.generate_comprehensive_report(experiment_data, metadata)
 - **[Backend Management Guide](docs/BACKEND_MANAGEMENT.md)**: Backend configuration and execution for simulators, hardware, and cloud services
 
 ### Quick Start Guides
-- **Getting Started**: [Installation Guide](docs/INSTALLATION.md) → [Examples](docs/EXAMPLES.md) → [API Reference](docs/API_REFERENCE.md)
-- **Plugin Development**: [Plugin Development Guide](docs/PLUGIN_DEVELOPMENT.md) → [Modular Architecture Guide](docs/MODULAR_ARCHITECTURE.md)
+- **Getting Started**: [Installation Guide](docs/INSTALLATION.md) → [Getting Started Tutorial](docs/GETTING_STARTED.md) → [Examples](docs/EXAMPLES.md) → [API Reference](docs/API_REFERENCE.md)
+- **Plugin Development**: [Plugin Development Guide](docs/PLUGIN_DEVELOPMENT.md) → [Modular Architecture Guide](docs/MODULAR_ARCHITECTURE.md) → [Contributing Guide](CONTRIBUTING.md)
 - **CLI Usage**: [CLI Reference Guide](docs/CLI_REFERENCE.md) → [Backend Management Guide](docs/BACKEND_MANAGEMENT.md)
+- **Performance Analysis**: [Performance Benchmarks](docs/PERFORMANCE_BENCHMARKS.md) → [Installation Guide](docs/INSTALLATION.md)
+
+### Contributing and Development
+- **[Contributing Guide](CONTRIBUTING.md)**: How to contribute to Coratrix with development setup, testing, and pull request process
+- **[Installation Guide](docs/INSTALLATION.md)**: Detailed setup instructions with dependency management and troubleshooting
+- **[Performance Benchmarks](docs/PERFORMANCE_BENCHMARKS.md)**: Comprehensive performance analysis with real-world metrics and framework comparisons
 - **Compiler Development**: [Compiler Stack Guide](docs/COMPILER_STACK.md) → [Plugin Development Guide](docs/PLUGIN_DEVELOPMENT.md)
 
 ## Extensibility
