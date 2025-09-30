@@ -36,6 +36,14 @@ Coratrix 4.0 isn't just another SDK—it's the **quantum computing equivalent of
 - **Automatic Inlining**: Expands macros and subcircuits for optimal execution
 - **Community Libraries**: Shared libraries of quantum algorithms and patterns
 
+### **📚 Strategic Power Moves Documentation**
+
+- **[🧠 Tensor Network Simulation Layer](docs/TENSOR_NETWORK_SIMULATION.md)**: Hybrid sparse-tensor simulation with dynamic switching and Cotengra integration
+- **[🤖 AI-Powered Circuit Optimizer](docs/AI_CIRCUIT_OPTIMIZER.md)**: ML-based pattern recognition, learned optimizations, and enhanced quantum DSL
+- **[⚡ Edge Execution Mode](docs/EDGE_EXECUTION.md)**: Lightweight compiled packages for edge GPUs with intelligent cloud fallback
+- **[🔧 Enhanced Quantum DSL](docs/ENHANCED_QUANTUM_DSL.md)**: Subcircuit abstractions, macro system, and automatic inlining
+- **[🏆 Competitive Advantages](docs/COMPETITIVE_ADVANTAGES.md)**: Head-to-head comparisons with Qiskit, Cirq, Forest, and PennyLane
+
 #### **📊 Performance Results**
 | Qubits | Single-Qubit Gate | Two-Qubit Gate | Memory Saved |
 |--------|------------------|----------------|--------------|
