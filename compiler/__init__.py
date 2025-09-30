@@ -1,20 +1,42 @@
 """
-Coratrix Compiler Infrastructure.
+Coratrix 4.0 Quantum OS - Adaptive Compiler Pipeline
+====================================================
 
-This module provides a complete compilation pipeline from high-level DSL
-to Coratrix IR to various target formats (QASM, Qiskit, PennyLane, etc.).
+The Adaptive Compiler Pipeline is the AI-driven brain of Coratrix 4.0's
+quantum compilation system. It provides intelligent circuit optimization,
+ML-based pattern recognition, and adaptive transpilation capabilities.
+
+This compiler transforms quantum circuits from high-level descriptions
+into optimized, backend-specific implementations through:
+
+- AI-driven pattern recognition and optimization
+- ML-based circuit analysis and transformation
+- Adaptive transpilation with learning capabilities
+- Multi-stage optimization pipeline
+- Backend-specific code generation
+- Performance prediction and optimization
+
+This is the GOD-TIER compiler that makes Coratrix feel alive.
 """
 
-from .dsl import QuantumDSL, DSLParser
-from .ir import CoratrixIR, IRBuilder, IROptimizer
-from .passes import CompilerPass, PassManager
-from .targets import QASMTarget, QiskitTarget, PennyLaneTarget
-from .backend import BackendInterface, BackendManager
+from .adaptive_compiler import AdaptiveCompiler, CompilerConfig
+from .ml_optimizer import MLOptimizer, OptimizationModel
+from .pattern_recognizer import PatternRecognizer, CircuitPattern
+from .transpiler import QuantumTranspiler, TranspilationStrategy
+from .optimization_passes import OptimizationPass, PassPipeline
+from .backend_generators import BackendGenerator, CodeGenerator
 
 __all__ = [
-    'QuantumDSL', 'DSLParser',
-    'CoratrixIR', 'IRBuilder', 'IROptimizer', 
-    'CompilerPass', 'PassManager',
-    'QASMTarget', 'QiskitTarget', 'PennyLaneTarget',
-    'BackendInterface', 'BackendManager'
+    'AdaptiveCompiler',
+    'CompilerConfig',
+    'MLOptimizer',
+    'OptimizationModel',
+    'PatternRecognizer',
+    'CircuitPattern',
+    'QuantumTranspiler',
+    'TranspilationStrategy',
+    'OptimizationPass',
+    'PassPipeline',
+    'BackendGenerator',
+    'CodeGenerator'
 ]

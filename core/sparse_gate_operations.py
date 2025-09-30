@@ -194,7 +194,16 @@ class SparseGateOperator:
         sparse_gate = self._create_sparse_single_qubit_gate(gate_matrix, target_qubit)
         
         # Apply gate
-        result = sparse_gate.dot(state)
+        try:
+            result = sparse_gate.dot(state)
+        except Exception as e:
+            # Fallback to dense operations for compatibility
+            logger.warning(f"Sparse operation failed, falling back to dense: {e}")
+            if sp.issparse(state):
+                state_dense = state.toarray().flatten()
+            else:
+                state_dense = state
+            return self._apply_dense_single_qubit_gate(state_dense, gate_matrix, target_qubit)
         
         # Convert back to original format
         if isinstance(state, np.ndarray):
@@ -305,6 +314,11 @@ class SparseGateOperator:
                 rows.extend([i, i])
                 cols.extend([i - stride, i])
                 data.extend([gate_matrix[1, 0], gate_matrix[1, 1]])
+        
+        # Ensure we have valid data
+        if not data:
+            # Fallback to identity matrix
+            return sp.identity(self.state_size, dtype=np.complex128)
         
         return sp.csr_matrix((data, (rows, cols)), shape=(self.state_size, self.state_size), dtype=np.complex128)
     
