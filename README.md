@@ -43,7 +43,7 @@ Coratrix is a fully modular, research-grade virtual quantum computer platform wi
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/palaseus/Coratrix.git
 cd Coratrix
 ```
 
