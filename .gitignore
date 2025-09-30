@@ -136,6 +136,26 @@ reports/
 *.csv
 *.log
 
+# Demo and example outputs
+demo_*.json
+*_results.json
+*_output.json
+comprehensive_test.json
+demo_results.json
+
+# Temporary exploration files
+research_exploration.py
+demo_production_features.py
+
+# Optimization traces
+optimization_traces/
+
+# Demo publication artifacts (keep structure, ignore generated content)
+demo_publication_artifacts/data/
+demo_publication_artifacts/figures/
+demo_publication_artifacts/reports/
+demo_publication_artifacts/report_summary.json
+
 # IDE files
 .vscode/
 .idea/

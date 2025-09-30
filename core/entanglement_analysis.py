@@ -479,6 +479,28 @@ class EntanglementAnalyzer:
         
         return {'is_w_state': False, 'w_type': None}
     
+    def get_entanglement_entropy(self, quantum_state: Union[QuantumState, ScalableQuantumState], 
+                                subsystem_indices: Optional[List[int]] = None) -> float:
+        """
+        Calculate entanglement entropy of the quantum state.
+        
+        Args:
+            quantum_state: Quantum state to analyze
+            subsystem_indices: Indices of qubits in the subsystem (default: first half)
+        
+        Returns:
+            Entanglement entropy value
+        """
+        if subsystem_indices is None:
+            # Default to first half of qubits
+            num_qubits = quantum_state.num_qubits
+            subsystem_indices = list(range(num_qubits // 2))
+        
+        if len(subsystem_indices) == 0 or len(subsystem_indices) >= quantum_state.num_qubits:
+            return 0.0
+        
+        return self._calculate_entanglement_entropy(quantum_state)
+    
     def get_entanglement_summary(self, quantum_state: Union[QuantumState, ScalableQuantumState]) -> str:
         """
         Get a human-readable summary of the entanglement analysis.

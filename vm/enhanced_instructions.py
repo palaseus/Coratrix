@@ -8,7 +8,9 @@ including loops, subroutines, parameterized gates, and conditional execution.
 from abc import ABC, abstractmethod
 from typing import List, Any, Dict, Union, Optional
 from enum import Enum
+import numpy as np
 from vm.instructions import QuantumInstruction, InstructionType
+from core.custom_gates import CustomCPhaseGate, CustomRotationGate
 
 
 class EnhancedInstructionType(Enum):
@@ -357,3 +359,53 @@ class QuantumAlgorithmInstruction(QuantumInstruction):
             return f"ALGORITHM {self.algorithm_name}({param_str})"
         else:
             return f"ALGORITHM {self.algorithm_name}"
+
+
+class CustomGateInstruction(QuantumInstruction):
+    """
+    Instruction for applying custom quantum gates.
+    
+    Supports custom gates like CustomCPhase and CustomRotation with parameters.
+    """
+    
+    def __init__(self, gate_name: str, target_qubits: List[int], parameters: Dict[str, Any] = None):
+        """
+        Initialize a custom gate instruction.
+        
+        Args:
+            gate_name: Name of the custom gate
+            target_qubits: List of qubit indices to apply the gate to
+            parameters: Parameters for the custom gate
+        """
+        super().__init__(InstructionType.GATE)
+        self.gate_name = gate_name
+        self.target_qubits = target_qubits
+        self.parameters = parameters or {}
+        self._gate_instance = None
+    
+    def _get_gate_instance(self):
+        """Get or create the gate instance."""
+        if self._gate_instance is None:
+            if self.gate_name == "CustomCPhase":
+                phi = self.parameters.get("phi", np.pi / 3)
+                self._gate_instance = CustomCPhaseGate(phi=phi)
+            elif self.gate_name == "CustomRotation":
+                theta = self.parameters.get("theta", np.pi / 4)
+                axis = self.parameters.get("axis", "x")
+                self._gate_instance = CustomRotationGate(theta=theta, axis=axis)
+            else:
+                raise ValueError(f"Unknown custom gate: {self.gate_name}")
+        return self._gate_instance
+    
+    def execute(self, executor) -> None:
+        """Execute the custom gate instruction."""
+        gate = self._get_gate_instance()
+        executor.state.apply_gate(gate, self.target_qubits)
+    
+    def __str__(self) -> str:
+        """String representation of the custom gate instruction."""
+        if self.parameters:
+            param_str = ", ".join(f"{k}={v}" for k, v in self.parameters.items())
+            return f"{self.gate_name}({param_str}) {self.target_qubits}"
+        else:
+            return f"{self.gate_name} {self.target_qubits}"

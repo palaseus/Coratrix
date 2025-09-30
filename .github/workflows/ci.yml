@@ -1,0 +1,339 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, 3.10, 3.11]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov hypothesis
+    
+    - name: Run unit tests
+      run: |
+        pytest tests/ -v --cov=core --cov=hardware --cov-report=xml
+    
+    - name: Run correctness tests
+      run: |
+        python tests/test_correctness_suite.py
+    
+    - name: Run hardware interface tests
+      run: |
+        python tests/test_hardware_interface.py
+    
+    - name: Run report generator tests
+      run: |
+        python tests/test_report_generator.py
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+  benchmark:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Run benchmarks
+      run: |
+        python bench/bench_scale.py
+    
+    - name: Upload benchmark results
+      uses: actions/upload-artifact@v3
+      with:
+        name: benchmark-results
+        path: bench_results.json
+
+  gpu-test:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    
+    - name: Install CUDA dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install cupy-cuda11x
+        pip install -r requirements.txt
+    
+    - name: Run GPU tests
+      run: |
+        python -c "import cupy; print('CuPy version:', cupy.__version__)"
+        python demo_production_features.py
+    
+    - name: Upload GPU test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: gpu-test-results
+        path: demo_results.json
+
+  security:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    
+    - name: Install security tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install bandit safety
+    
+    - name: Run security scan
+      run: |
+        bandit -r core/ hardware/ -f json -o bandit-report.json
+        safety check --json --output safety-report.json
+    
+    - name: Upload security reports
+      uses: actions/upload-artifact@v3
+      with:
+        name: security-reports
+        path: |
+          bandit-report.json
+          safety-report.json
+
+  documentation:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    
+    - name: Install documentation dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install sphinx sphinx-rtd-theme
+        pip install -r requirements.txt
+    
+    - name: Build documentation
+      run: |
+        cd docs/
+        sphinx-build -b html . _build/html
+    
+    - name: Upload documentation
+      uses: actions/upload-artifact@v3
+      with:
+        name: documentation
+        path: docs/_build/html
+
+  integration:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Run integration tests
+      run: |
+        python demo_production_features.py
+    
+    - name: Test OpenQASM import/export
+      run: |
+        python -c "
+        from hardware.openqasm_interface import OpenQASMConverter
+        from core.gates import HGate, CNOTGate
+        from core.circuit import QuantumCircuit
+        
+        circuit = QuantumCircuit(2)
+        circuit.add_gate(HGate(), [0])
+        circuit.add_gate(CNOTGate(), [0, 1])
+        
+        converter = OpenQASMConverter()
+        qasm = converter.circuit_to_qasm(circuit)
+        print('OpenQASM export successful')
+        
+        imported = converter.qasm_to_circuit(qasm)
+        print('OpenQASM import successful')
+        "
+    
+    - name: Test hardware backends
+      run: |
+        python -c "
+        from hardware.backend_interface import LocalSimulatorBackend, IBMQStubBackend
+        from core.gates import HGate, CNOTGate
+        from core.circuit import QuantumCircuit
+        
+        circuit = QuantumCircuit(2)
+        circuit.add_gate(HGate(), [0])
+        circuit.add_gate(CNOTGate(), [0, 1])
+        
+        local_backend = LocalSimulatorBackend(2)
+        results = local_backend.run_circuit(circuit, shots=100)
+        print('Local backend test successful')
+        
+        ibmq_backend = IBMQStubBackend(2)
+        results = ibmq_backend.run_circuit(circuit, shots=100)
+        print('IBMQ backend test successful')
+        "
+    
+    - name: Upload integration test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: integration-test-results
+        path: demo_results.json
+
+  performance:
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Run performance tests
+      run: |
+        python bench/bench_scale.py
+        
+        # Test 8-qubit performance target
+        python -c "
+        import time
+        from core.scalable_quantum_state import ScalableQuantumState
+        from core.gates import HGate, CNOTGate
+        from core.circuit import QuantumCircuit
+        
+        # Test 8-qubit performance
+        state = ScalableQuantumState(8, use_sparse=True)
+        circuit = QuantumCircuit(8)
+        circuit.quantum_state = state
+        
+        start_time = time.time()
+        for i in range(50):
+            circuit.apply_gate(HGate(), [i % 8])
+            if i % 2 == 0:
+                circuit.apply_gate(CNOTGate(), [i % 8, (i+1) % 8])
+        end_time = time.time()
+        
+        print(f'8-qubit performance: {end_time - start_time:.4f}s')
+        assert end_time - start_time <= 3.0, 'Performance target not met'
+        print('Performance target met!')
+        "
+    
+    - name: Upload performance results
+      uses: actions/upload-artifact@v3
+      with:
+        name: performance-results
+        path: bench_results.json
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: [test, benchmark, integration, performance]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Generate publication artifacts
+      run: |
+        python demo_production_features.py
+    
+    - name: Upload publication artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: publication-artifacts
+        path: demo_publication_artifacts/
+    
+    - name: Create release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ github.run_number }}
+        release_name: Release v${{ github.run_number }}
+        body: |
+          Automated release with publication artifacts
+          
+          - GPU acceleration and sparse-state simulation
+          - Hardware interfaces and OpenQASM support
+          - Noise models and error mitigation
+          - Advanced algorithms and optimization
+          - Multi-subspace Grover experiments
+          - Publication-ready report generation
+        draft: false
+        prerelease: false

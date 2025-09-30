@@ -292,8 +292,8 @@ class RzGate(ParameterizedGate):
             raise ValueError("Rz gate acts on exactly one qubit")
         
         theta = self.parameters["theta"]
-        exp_neg_i_theta_2 = math.exp(-1j * theta / 2)
-        exp_pos_i_theta_2 = math.exp(1j * theta / 2)
+        exp_neg_i_theta_2 = np.exp(-1j * theta / 2)
+        exp_pos_i_theta_2 = np.exp(1j * theta / 2)
         
         single_qubit_matrix = np.array([
             [exp_neg_i_theta_2, 0],
@@ -351,7 +351,7 @@ class CPhaseGate(ParameterizedGate):
         
         control_qubit, target_qubit = target_qubits[0], target_qubits[1]
         phi = self.parameters["phi"]
-        exp_i_phi = math.exp(1j * phi)
+        exp_i_phi = np.exp(1j * phi)
         
         dimension = 2 ** num_qubits
         matrix = np.eye(dimension, dtype=complex)
@@ -455,7 +455,7 @@ class TGate(QuantumGate):
         super().__init__("T")
         self.single_qubit_matrix = np.array([
             [1, 0],
-            [0, math.exp(1j * math.pi / 4)]
+            [0, np.exp(1j * np.pi / 4)]
         ], dtype=complex)
     
     def get_matrix(self, num_qubits: int, target_qubits: List[int]) -> np.ndarray:

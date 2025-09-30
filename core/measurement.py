@@ -7,7 +7,7 @@ collapse of quantum states when measurements are performed.
 
 import numpy as np
 import random
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, Dict
 from core.qubit import QuantumState
 
 
@@ -155,6 +155,30 @@ class Measurement:
             List of measurement results
         """
         return self.measurement_history.copy()
+    
+    def measure_multiple(self, quantum_state: QuantumState, shots: int) -> Dict[str, int]:
+        """
+        Perform multiple measurements and return counts.
+        
+        Args:
+            quantum_state: The quantum state to measure
+            shots: Number of measurements to perform
+            
+        Returns:
+            Dictionary mapping bitstrings to counts
+        """
+        counts = {}
+        probabilities = quantum_state.get_probabilities()
+        
+        for _ in range(shots):
+            # Sample from the probability distribution
+            outcome = self._sample_from_distribution(probabilities)
+            
+            # Convert to bitstring
+            bitstring = format(outcome, f'0{quantum_state.num_qubits}b')
+            counts[bitstring] = counts.get(bitstring, 0) + 1
+        
+        return counts
     
     def get_expected_value(self, observable: np.ndarray) -> float:
         """

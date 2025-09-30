@@ -6,7 +6,7 @@ complex state vectors and supports n-qubit systems.
 """
 
 import numpy as np
-from typing import List, Tuple, Union
+from typing import List, Optional, Tuple, Union
 import math
 
 
@@ -164,3 +164,27 @@ class QuantumState:
         
         binary = format(state_index, f'0{self.num_qubits}b')
         return [int(bit) for bit in binary]
+    
+    def get_entanglement_entropy(self, subsystem_indices: Optional[List[int]] = None) -> float:
+        """
+        Calculate entanglement entropy of the quantum state.
+        
+        Args:
+            subsystem_indices: Indices of qubits in the subsystem (default: first half)
+        
+        Returns:
+            Entanglement entropy value
+        """
+        from core.entanglement_analysis import EntanglementAnalyzer
+        analyzer = EntanglementAnalyzer()
+        return analyzer.get_entanglement_entropy(self, subsystem_indices)
+    
+    def get_density_matrix(self) -> np.ndarray:
+        """
+        Get the density matrix representation of the quantum state.
+        
+        Returns:
+            Density matrix as numpy array
+        """
+        state_vector = self.state_vector.reshape(-1, 1)
+        return np.outer(state_vector, state_vector.conj())
