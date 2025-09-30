@@ -109,11 +109,29 @@ conda install numpy scipy matplotlib
 #### Core Dependencies (Required)
 
 ```bash
-# Essential packages
-pip install numpy>=1.21.0
-pip install scipy>=1.7.0
-pip install matplotlib>=3.5.0
-pip install psutil>=5.8.0
+# Essential packages with version constraints
+pip install "numpy>=1.21.0,<2.0.0"
+pip install "scipy>=1.7.0,<2.0.0"
+pip install "matplotlib>=3.5.0,<4.0.0"
+pip install "psutil>=5.8.0,<6.0.0"
+
+# Verify installation
+python -c "import numpy, scipy, matplotlib, psutil; print('Core dependencies installed successfully')"
+```
+
+#### Dependency Conflict Checking
+
+```bash
+# Check for dependency conflicts
+pip install pipdeptree
+pipdeptree
+
+# Check for specific conflicts
+pip check
+
+# Resolve conflicts if found
+pip install --upgrade pip
+pip install --force-reinstall numpy scipy matplotlib
 ```
 
 #### Optional Dependencies
@@ -164,17 +182,33 @@ pip install .
    nvcc --version
    ```
 
-2. **Install CuPy**
+2. **Install CuPy with Version Constraints**
    ```bash
-   # For CUDA 11.x
-   pip install cupy-cuda11x
+   # Check CUDA version first
+   nvcc --version
+   
+   # For CUDA 11.x (recommended)
+   pip install "cupy-cuda11x>=10.0.0,<13.0.0"
    
    # For CUDA 12.x
-   pip install cupy-cuda12x
+   pip install "cupy-cuda12x>=10.0.0,<13.0.0"
    
-   # Verify CuPy installation
-   python -c "import cupy; print('CuPy installed successfully!')"
+   # Verify CuPy installation and CUDA compatibility
+   python -c "import cupy; print(f'CuPy version: {cupy.__version__}'); print(f'CUDA version: {cupy.cuda.runtime.runtimeGetVersion()}')"
    ```
+
+3. **CUDA Version Compatibility Matrix**
+   
+   | CUDA Version | CuPy Package | Python Support | Notes |
+   |---------------|--------------|-----------------|-------|
+   | 11.0-11.8     | cupy-cuda11x | 3.8-3.12       | Recommended |
+   | 12.0-12.4     | cupy-cuda12x | 3.8-3.12       | Latest features |
+   | 11.2+         | cupy-cuda11x | 3.8-3.12       | Best compatibility |
+   
+   **Common CUDA Issues:**
+   - **Version Mismatch**: Ensure CUDA version matches CuPy package
+   - **Driver Issues**: Update NVIDIA drivers to latest version
+   - **Memory Issues**: Check GPU memory availability
 
 #### For Apple Silicon (M1/M2)
 
