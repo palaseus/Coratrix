@@ -158,15 +158,9 @@ def test_grover_with_noise():
     print(f"  Noisy: {target_prob_noisy:.4f}")
     print(f"  Degradation: {((target_prob_clean - target_prob_noisy) / target_prob_clean * 100):.2f}%")
     
-    return {
-        "entropy_clean": entropy_clean,
-        "entropy_noisy": entropy_noisy,
-        "negativity_clean": negativity_clean,
-        "negativity_noisy": negativity_noisy,
-        "fidelity": fidelity,
-        "target_prob_clean": target_prob_clean,
-        "target_prob_noisy": target_prob_noisy
-    }
+    # Verify results are reasonable
+    assert fidelity > 0.0
+    assert target_prob_clean > 0.0
 
 def test_qft_with_noise():
     """Test QFT algorithm with and without noise."""
@@ -231,15 +225,9 @@ def test_qft_with_noise():
     print(f"Clean state phases: {[f'{p:.3f}' for p in phases_clean[:4]]}")
     print(f"Noisy state phases: {[f'{p:.3f}' for p in phases_noisy[:4]]}")
     
-    return {
-        "entropy_clean": entropy_clean,
-        "entropy_noisy": entropy_noisy,
-        "negativity_clean": negativity_clean,
-        "negativity_noisy": negativity_noisy,
-        "fidelity": fidelity,
-        "phase_coherence_clean": len(phases_clean),
-        "phase_coherence_noisy": len(phases_noisy)
-    }
+    # Verify results are reasonable
+    assert fidelity > 0.0
+    assert len(phases_clean) > 0
 
 def test_noise_scaling():
     """Test how different noise levels affect algorithms."""
@@ -283,7 +271,9 @@ def test_noise_scaling():
         
         print(f"  Entropy: {entropy:.4f}, Negativity: {negativity:.4f}, Purity: {purity:.4f}")
     
-    return results
+    # Verify results are reasonable
+    assert len(results) > 0
+    assert all('entropy' in r for r in results)
 
 def test_entanglement_degradation():
     """Test how entanglement degrades under different noise conditions."""
@@ -329,7 +319,9 @@ def test_entanglement_degradation():
             
             print(f"  {noise_name} noise - Entropy: {entropy:.4f}, Negativity: {negativity:.4f}")
     
-    return results
+    # Verify results are reasonable
+    assert len(results) > 0
+    assert all('Low' in r for r in results.values())
 
 def create_bell_state():
     """Create a Bell state."""
@@ -392,7 +384,9 @@ def main():
     
     print(f"\nResults saved to: noise_analysis_results.json")
     
-    return all_results
+    # Verify results are reasonable
+    assert len(all_results) > 0
+    assert 'grover_results' in all_results
 
 if __name__ == "__main__":
     results = main()

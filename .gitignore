@@ -143,6 +143,13 @@ demo_*.json
 comprehensive_test.json
 demo_results.json
 
+# Modular SDK specific
+coratrixc
+coratrixc.exe
+*.qasm
+*.qiskit
+*.pennylane
+
 # Temporary exploration files
 research_exploration.py
 demo_production_features.py
@@ -226,3 +233,29 @@ requirements.lock
 # Local configuration
 config.local.py
 settings.local.py
+
+# Plugin system
+plugins/
+~/.coratrix/plugins/
+*.plugin
+
+# CLI outputs
+*.qasm
+*.qiskit
+*.pennylane
+*.cirq
+*.braket
+
+# Compiler outputs
+*.ir
+*.target
+*.compiled
+
+# Backend outputs
+*.backend
+*.simulator
+*.hardware
+
+# Test artifacts
+test_modular_sdk.py
+test_clean.py

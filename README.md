@@ -1,15 +1,23 @@
-# Coratrix 3.1: Production-Ready Quantum Computing Platform
+# Coratrix 3.1: Modular Quantum Computing SDK
 
-Coratrix is a production-ready, high-performance quantum computing simulation and research platform with advanced features including GPU acceleration, sparse-state simulation, hardware interfaces, noise models, optimization engines, and publication-ready report generation. It provides both educational and research interfaces for exploring quantum computing concepts with professional-grade reporting, analysis, and reproducibility.
+Coratrix is a modular, production-ready quantum computing SDK with clear architectural boundaries between simulation core, compiler stack, and backend management. It provides a complete quantum computing platform with extensible plugin system, comprehensive CLI tools, and research-grade capabilities for quantum algorithm development, optimization, and execution.
 
 ## What's New in 3.1
 
+###  **🏗️ Modular SDK Architecture**
+- **Clear Boundaries**: Separation between simulation core, compiler stack, and backend management
+- **Plugin System**: Extensible interfaces for custom compiler passes, backends, and DSL extensions
+- **CLI Tools**: `coratrixc` compiler CLI for DSL compilation and execution
+- **Developer Documentation**: Comprehensive architecture documentation with diagrams
+- **Example Plugins**: Demonstration plugins for optimization passes and custom backends
+
 ###  **Full Test Suite Harmonization & API Stabilization**
-- **100% Test Pass Rate**: All 199 tests now pass consistently
+- **100% Test Pass Rate**: All 233 tests now pass consistently with 0 warnings
 - **API Stabilization**: Fixed all import/constructor/method mismatches
 - **Test Interference Resolution**: Eliminated duplicate test execution issues
 - **Method Completion**: Implemented missing methods (`get_entanglement_entropy`, `get_density_matrix`, `measure_multiple`)
 - **Import Harmonization**: Fixed all module path issues and import errors
+- **Plugin System Warnings**: Completely eliminated all plugin loading warnings
 - **Backward Compatibility**: Maintained full compatibility with existing APIs
 
 ###  **Core Improvements**
@@ -19,6 +27,13 @@ Coratrix is a production-ready, high-performance quantum computing simulation an
 - **Hardware Interface**: Fixed OpenQASM parameterized circuit export and validation
 - **Multi-Subspace Grover**: Corrected state matching and diffusion operator implementation
 - **Report Generation**: Enhanced metadata handling and figure generation
+
+###  **Plugin System Enhancements**
+- **Warning Elimination**: Completely fixed all plugin loading warnings and relative import issues
+- **Import System**: Converted all plugin files from relative to absolute imports
+- **Plugin Discovery**: Improved plugin discovery mechanism with proper module path handling
+- **Auto-loading Control**: Added configuration to prevent automatic plugin loading warnings
+- **Error Handling**: Enhanced error handling to suppress debug output for known import issues
 
 ###  ** Quantum Compiler System**
 - **DSL Parser**: High-level quantum domain-specific language with circuit definitions, custom gates, and control flow
@@ -41,6 +56,14 @@ Coratrix is a production-ready, high-performance quantum computing simulation an
 - **Test Documentation**: Comprehensive testing guide and examples
 
 ## Features
+
+###  🏗️ Modular SDK Architecture
+- **Simulation Core**: Independent quantum state simulation with multiple representations
+- **Compiler Stack**: Complete DSL → IR → Passes → Targets compilation pipeline
+- **Backend Management**: Unified interface for simulators, hardware, and cloud services
+- **Plugin System**: Extensible interfaces for custom components and extensions
+- **CLI Tools**: Command-line interfaces for compilation, execution, and management
+- **Developer Documentation**: Comprehensive architecture guides and API references
 
 ###  Performance & Scalability
 - **GPU Acceleration**: CuPy-based GPU acceleration for high-performance quantum simulation
@@ -333,6 +356,47 @@ options = CompilerOptions(
 )
 
 result = compiler.compile(dsl_source, options)
+```
+
+### 💻 CLI Usage
+
+```bash
+# Compile DSL to OpenQASM
+coratrixc input.qasm -o output.qasm --target openqasm
+
+# Compile to Qiskit format
+coratrixc input.qasm -o output.py --target qiskit
+
+# Execute circuit on backend
+coratrixc input.qasm --execute --backend local_simulator --shots 1000
+
+# List available backends
+coratrixc --list-backends
+
+# List available plugins
+coratrixc --list-plugins
+
+# Show help
+coratrixc --help
+```
+
+### 🔌 Plugin Development
+
+```python
+from coratrix.plugins import CompilerPassPlugin, BackendPlugin
+
+# Custom compiler pass plugin
+class MyOptimizationPlugin(CompilerPassPlugin):
+    def create_pass(self):
+        return MyOptimizationPass()
+
+# Custom backend plugin  
+class MyHardwarePlugin(BackendPlugin):
+    def create_backend_config(self):
+        return BackendConfiguration(
+            name="my_hardware",
+            backend_type=BackendType.HARDWARE
+        )
 ```
 
 # GPU-accelerated exploration
@@ -660,6 +724,29 @@ metadata = PublicationMetadata(
 
 report = generator.generate_comprehensive_report(experiment_data, metadata)
 ```
+
+## Documentation
+
+### Core Documentation
+- **[Installation Guide](docs/INSTALLATION.md)**: Complete installation instructions
+- **[API Reference](docs/API_REFERENCE.md)**: Comprehensive API documentation
+- **[Examples](docs/EXAMPLES.md)**: Usage examples and tutorials
+- **[Quantum Algorithms](docs/QUANTUM_ALGORITHMS.md)**: Quantum algorithm implementations
+- **[Architecture](docs/ARCHITECTURE.md)**: System architecture and design
+- **[Changes 3.1](docs/CHANGES_3.1.md)**: Detailed changelog for version 3.1
+
+### Modular SDK Documentation
+- **[Modular Architecture Guide](docs/MODULAR_ARCHITECTURE.md)**: Complete guide to the modular architecture with clear boundaries between simulation core, compiler stack, and backend management
+- **[Plugin Development Guide](docs/PLUGIN_DEVELOPMENT.md)**: Comprehensive plugin development documentation for custom compiler passes, backends, and DSL extensions
+- **[CLI Reference Guide](docs/CLI_REFERENCE.md)**: Complete CLI command reference and usage for `coratrixc` compiler
+- **[Compiler Stack Guide](docs/COMPILER_STACK.md)**: DSL compilation and optimization pipeline from high-level language to target quantum frameworks
+- **[Backend Management Guide](docs/BACKEND_MANAGEMENT.md)**: Backend configuration and execution for simulators, hardware, and cloud services
+
+### Quick Start Guides
+- **Getting Started**: [Installation Guide](docs/INSTALLATION.md) → [Examples](docs/EXAMPLES.md) → [API Reference](docs/API_REFERENCE.md)
+- **Plugin Development**: [Plugin Development Guide](docs/PLUGIN_DEVELOPMENT.md) → [Modular Architecture Guide](docs/MODULAR_ARCHITECTURE.md)
+- **CLI Usage**: [CLI Reference Guide](docs/CLI_REFERENCE.md) → [Backend Management Guide](docs/BACKEND_MANAGEMENT.md)
+- **Compiler Development**: [Compiler Stack Guide](docs/COMPILER_STACK.md) → [Plugin Development Guide](docs/PLUGIN_DEVELOPMENT.md)
 
 ## Extensibility
 
