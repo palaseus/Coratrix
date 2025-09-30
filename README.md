@@ -1050,7 +1050,4 @@ We welcome contributions from the global quantum computing community:
 - **Testing**: Test cases, benchmarks, and quality assurance
 - **Community**: Forums, discussions, and user support
 
-## Acknowledgments
-
-Coratrix 4.0 represents the collective effort of the global quantum computing community. We thank the thousands of developers, researchers, educators, and students who have contributed to making Coratrix the leading quantum computing platform. Special recognition goes to our core maintainers, corporate sponsors, and academic partners who have made this revolutionary platform possible.
 
