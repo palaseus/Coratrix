@@ -575,6 +575,155 @@ class SelfEvolvingOptimizer:
         except Exception as e:
             logger.error(f"Error in evolution cycle: {e}")
     
+    async def _evaluate_population_fitness(self) -> List[float]:
+        """Evaluate fitness of the evolution population."""
+        try:
+            fitness_scores = []
+            for individual in self.evolution_population:
+                # Simulate fitness evaluation based on strategy and parameters
+                base_fitness = random.uniform(0.1, 0.9)
+                strategy_bonus = 0.1 if individual['strategy'] == OptimizationStrategy.GENETIC_ALGORITHM else 0.0
+                individual['fitness'] = min(1.0, base_fitness + strategy_bonus)
+                fitness_scores.append(individual['fitness'])
+            
+            return fitness_scores
+        except Exception as e:
+            logger.error(f"Error evaluating population fitness: {e}")
+            return [0.0] * len(self.evolution_population)
+    
+    async def _evolution_selection(self, fitness_scores: List[float]) -> List[Dict[str, Any]]:
+        """Select individuals for reproduction."""
+        try:
+            # Tournament selection
+            selected = []
+            tournament_size = min(3, len(self.evolution_population))
+            
+            for _ in range(len(self.evolution_population)):
+                tournament_indices = random.sample(range(len(self.evolution_population)), tournament_size)
+                tournament_fitness = [fitness_scores[i] for i in tournament_indices]
+                winner_index = tournament_indices[np.argmax(tournament_fitness)]
+                selected.append(self.evolution_population[winner_index])
+            
+            return selected
+        except Exception as e:
+            logger.error(f"Error in evolution selection: {e}")
+            return self.evolution_population
+    
+    async def _evolution_crossover(self, selected: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Perform crossover to create offspring."""
+        try:
+            offspring = []
+            
+            for i in range(0, len(selected), 2):
+                if i + 1 < len(selected):
+                    parent1 = selected[i]
+                    parent2 = selected[i + 1]
+                    
+                    # Create offspring by combining parameters
+                    child = {
+                        'id': f"child_{uuid.uuid4().hex[:8]}",
+                        'strategy': random.choice([parent1['strategy'], parent2['strategy']]),
+                        'parameters': self._crossover_parameters(parent1['parameters'], parent2['parameters']),
+                        'fitness': 0.0,
+                        'generation': max(parent1['generation'], parent2['generation']) + 1,
+                        'parent_ids': [parent1['id'], parent2['id']],
+                        'mutation_rate': (parent1['mutation_rate'] + parent2['mutation_rate']) / 2,
+                        'crossover_rate': (parent1['crossover_rate'] + parent2['crossover_rate']) / 2
+                    }
+                    offspring.append(child)
+            
+            return offspring
+        except Exception as e:
+            logger.error(f"Error in evolution crossover: {e}")
+            return []
+    
+    def _crossover_parameters(self, params1: Dict[str, Any], params2: Dict[str, Any]) -> Dict[str, Any]:
+        """Crossover parameters from two parents."""
+        child_params = {}
+        for key in params1:
+            if key in params2:
+                # Average the parameters
+                if isinstance(params1[key], (int, float)):
+                    child_params[key] = (params1[key] + params2[key]) / 2
+                else:
+                    child_params[key] = random.choice([params1[key], params2[key]])
+            else:
+                child_params[key] = params1[key]
+        return child_params
+    
+    async def _evolution_mutation(self, offspring: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """Apply mutation to offspring."""
+        try:
+            mutated = []
+            for child in offspring:
+                if random.random() < child['mutation_rate']:
+                    # Apply mutation to parameters
+                    child['parameters'] = self._mutate_parameters(child['parameters'])
+                    child['mutation_rate'] = max(0.01, child['mutation_rate'] * random.uniform(0.9, 1.1))
+                
+                mutated.append(child)
+            
+            return mutated
+        except Exception as e:
+            logger.error(f"Error in evolution mutation: {e}")
+            return offspring
+    
+    def _mutate_parameters(self, parameters: Dict[str, Any]) -> Dict[str, Any]:
+        """Mutate parameters."""
+        mutated = parameters.copy()
+        for key, value in mutated.items():
+            if isinstance(value, (int, float)):
+                # Add small random change
+                mutation_strength = random.uniform(-0.1, 0.1)
+                if isinstance(value, int):
+                    mutated[key] = max(1, int(value * (1 + mutation_strength)))
+                else:
+                    mutated[key] = max(0.001, value * (1 + mutation_strength))
+        return mutated
+    
+    async def _update_evolution_population(self, population: List[Dict[str, Any]], 
+                                         offspring: List[Dict[str, Any]], 
+                                         fitness_scores: List[float]) -> List[Dict[str, Any]]:
+        """Update the evolution population."""
+        try:
+            # Combine population and offspring
+            combined = population + offspring
+            
+            # Sort by fitness
+            combined.sort(key=lambda x: x['fitness'], reverse=True)
+            
+            # Keep top individuals
+            new_population = combined[:len(population)]
+            
+            return new_population
+        except Exception as e:
+            logger.error(f"Error updating evolution population: {e}")
+            return population
+    
+    def _calculate_population_diversity(self) -> float:
+        """Calculate population diversity."""
+        try:
+            if not self.evolution_population:
+                return 0.0
+            
+            strategies = [ind['strategy'] for ind in self.evolution_population]
+            unique_strategies = len(set(strategies))
+            total_strategies = len(OptimizationStrategy)
+            
+            return unique_strategies / total_strategies
+        except Exception as e:
+            logger.error(f"Error calculating population diversity: {e}")
+            return 0.0
+    
+    def _update_evolution_statistics(self):
+        """Update evolution statistics."""
+        try:
+            if hasattr(self, 'evolution_statistics'):
+                self.evolution_statistics['total_cycles'] += 1
+                self.evolution_statistics['current_diversity'] = self._calculate_population_diversity()
+        except Exception as e:
+            logger.error(f"Error updating evolution statistics: {e}")
+    
     async def _check_algorithm_retirement(self):
         """Check for algorithms that should be retired."""
         try:
@@ -825,3 +974,80 @@ class SelfEvolvingOptimizer:
             'adaptation_history': list(self.adaptation_history),
             'statistics': dict(self.evolution_statistics)
         }
+
+    async def _initialize_evolution_population(self) -> List[Dict[str, Any]]:
+        """Initialize the evolution population with diverse algorithm variants."""
+        try:
+            population = []
+            
+            # Generate diverse population based on different strategies
+            for i in range(20):  # Population size of 20
+                individual = {
+                    'id': f"ind_{uuid.uuid4().hex[:8]}",
+                    'strategy': random.choice(list(OptimizationStrategy)),
+                    'parameters': self._generate_random_parameters(),
+                    'fitness': 0.0,
+                    'generation': 0,
+                    'parent_ids': [],
+                    'mutation_rate': random.uniform(0.01, 0.1),
+                    'crossover_rate': random.uniform(0.6, 0.9)
+                }
+                population.append(individual)
+            
+            logger.info(f"🧬 Initialized evolution population with {len(population)} individuals")
+            return population
+            
+        except Exception as e:
+            logger.error(f"❌ Error initializing evolution population: {e}")
+            return []
+
+    def _generate_random_parameters(self) -> Dict[str, Any]:
+        """Generate random parameters for evolution individuals."""
+        return {
+            'learning_rate': random.uniform(0.001, 0.1),
+            'mutation_strength': random.uniform(0.01, 0.5),
+            'population_size': random.randint(10, 50),
+            'elite_ratio': random.uniform(0.1, 0.3),
+            'crossover_type': random.choice(['uniform', 'single_point', 'two_point']),
+            'selection_pressure': random.uniform(1.0, 3.0),
+            'diversity_weight': random.uniform(0.1, 0.9),
+            'exploration_rate': random.uniform(0.1, 0.9)
+        }
+
+    async def _analyze_evolution_state(self) -> Dict[str, Any]:
+        """Analyze the current state of the evolution process."""
+        try:
+            if not hasattr(self, 'evolution_population') or not self.evolution_population:
+                return {'status': 'no_population', 'diversity': 0.0, 'convergence': 0.0}
+            
+            # Calculate diversity metrics
+            strategies = [ind['strategy'] for ind in self.evolution_population]
+            strategy_counts = {strategy: strategies.count(strategy) for strategy in set(strategies)}
+            diversity = len(strategy_counts) / len(OptimizationStrategy)
+            
+            # Calculate convergence
+            fitnesses = [ind['fitness'] for ind in self.evolution_population if ind['fitness'] > 0]
+            if len(fitnesses) > 1:
+                convergence = 1.0 - (np.std(fitnesses) / (np.mean(fitnesses) + 1e-8))
+            else:
+                convergence = 0.0
+            
+            # Calculate average fitness
+            avg_fitness = np.mean(fitnesses) if fitnesses else 0.0
+            
+            state = {
+                'status': 'active',
+                'population_size': len(self.evolution_population),
+                'diversity': diversity,
+                'convergence': convergence,
+                'avg_fitness': avg_fitness,
+                'strategy_distribution': strategy_counts,
+                'generation': max([ind['generation'] for ind in self.evolution_population], default=0)
+            }
+            
+            logger.info(f"📊 Evolution state: diversity={diversity:.3f}, convergence={convergence:.3f}, avg_fitness={avg_fitness:.3f}")
+            return state
+            
+        except Exception as e:
+            logger.error(f"❌ Error analyzing evolution state: {e}")
+            return {'status': 'error', 'diversity': 0.0, 'convergence': 0.0}

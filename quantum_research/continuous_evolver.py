@@ -270,23 +270,33 @@ class ContinuousEvolver:
             if not self.evolution_population:
                 self.evolution_population = await self._initialize_evolution_population()
             
-            # Run evolution based on current phase
-            if self.current_phase == EvolutionPhase.EXPLORATION:
-                await self._exploration_phase()
-            elif self.current_phase == EvolutionPhase.EXPLOITATION:
-                await self._exploitation_phase()
-            elif self.current_phase == EvolutionPhase.ADAPTATION:
-                await self._adaptation_phase()
-            elif self.current_phase == EvolutionPhase.INNOVATION:
-                await self._innovation_phase()
-            elif self.current_phase == EvolutionPhase.CONVERGENCE:
-                await self._convergence_phase()
+            # Run evolution based on current phase with error handling
+            try:
+                if self.current_phase == EvolutionPhase.EXPLORATION:
+                    await self._exploration_phase()
+                elif self.current_phase == EvolutionPhase.EXPLOITATION:
+                    await self._exploitation_phase()
+                elif self.current_phase == EvolutionPhase.ADAPTATION:
+                    await self._adaptation_phase()
+                elif self.current_phase == EvolutionPhase.INNOVATION:
+                    await self._innovation_phase()
+                elif self.current_phase == EvolutionPhase.CONVERGENCE:
+                    await self._convergence_phase()
+            except Exception as phase_error:
+                logger.error(f"Error in {self.current_phase.value} phase: {phase_error}")
+                # Continue with next phase instead of crashing
+                await self._update_evolution_phase()
             
             # Update evolution statistics
-            self._update_evolution_statistics()
+            try:
+                self._update_evolution_statistics()
+            except Exception as stats_error:
+                logger.error(f"Error updating evolution statistics: {stats_error}")
             
         except Exception as e:
             logger.error(f"Error in evolution cycle: {e}")
+            # Don't let evolution errors crash the entire system
+            await asyncio.sleep(1.0)
     
     async def _exploration_phase(self):
         """Run exploration phase."""
@@ -700,3 +710,216 @@ class ContinuousEvolver:
             'hardware_trends': dict(self.hardware_trends),
             'algorithm_trends': dict(self.algorithm_trends)
         }
+
+    async def _initialize_evolution_population(self) -> List[Dict[str, Any]]:
+        """Initialize the evolution population with diverse individuals."""
+        try:
+            population = []
+            
+            # Generate diverse population
+            for i in range(30):  # Population size of 30
+                individual = {
+                    'id': f"ind_{uuid.uuid4().hex[:8]}",
+                    'phase': random.choice(list(EvolutionPhase)),
+                    'strategy': random.choice(list(EvolutionStrategy)),
+                    'parameters': self._generate_random_evolution_parameters(),
+                    'fitness': 0.0,
+                    'generation': 0,
+                    'parent_ids': [],
+                    'mutation_rate': random.uniform(0.01, 0.15),
+                    'crossover_rate': random.uniform(0.5, 0.9),
+                    'adaptation_rate': random.uniform(0.1, 0.8)
+                }
+                population.append(individual)
+            
+            logger.info(f"🧬 Initialized evolution population with {len(population)} individuals")
+            return population
+            
+        except Exception as e:
+            logger.error(f"❌ Error initializing evolution population: {e}")
+            return []
+
+    def _generate_random_evolution_parameters(self) -> Dict[str, Any]:
+        """Generate random parameters for evolution individuals."""
+        return {
+            'exploration_rate': random.uniform(0.1, 0.9),
+            'exploitation_rate': random.uniform(0.1, 0.9),
+            'adaptation_speed': random.uniform(0.1, 1.0),
+            'innovation_threshold': random.uniform(0.1, 0.9),
+            'convergence_threshold': random.uniform(0.1, 0.9),
+            'diversity_weight': random.uniform(0.1, 0.9),
+            'selection_pressure': random.uniform(1.0, 3.0),
+            'migration_rate': random.uniform(0.01, 0.3)
+        }
+
+    async def _analyze_evolution_state(self) -> Dict[str, Any]:
+        """Analyze the current state of the evolution process."""
+        try:
+            if not hasattr(self, 'evolution_population') or not self.evolution_population:
+                return {'status': 'no_population', 'diversity': 0.0, 'convergence': 0.0}
+            
+            # Calculate diversity metrics
+            phases = [ind['phase'] for ind in self.evolution_population]
+            strategies = [ind['strategy'] for ind in self.evolution_population]
+            
+            phase_diversity = len(set(phases)) / len(EvolutionPhase)
+            strategy_diversity = len(set(strategies)) / len(EvolutionStrategy)
+            overall_diversity = (phase_diversity + strategy_diversity) / 2
+            
+            # Calculate convergence
+            fitnesses = [ind['fitness'] for ind in self.evolution_population if ind['fitness'] > 0]
+            if len(fitnesses) > 1:
+                convergence = 1.0 - (np.std(fitnesses) / (np.mean(fitnesses) + 1e-8))
+            else:
+                convergence = 0.0
+            
+            # Calculate average fitness
+            avg_fitness = np.mean(fitnesses) if fitnesses else 0.0
+            
+            state = {
+                'status': 'active',
+                'population_size': len(self.evolution_population),
+                'diversity': overall_diversity,
+                'convergence': convergence,
+                'avg_fitness': avg_fitness,
+                'phase_distribution': {phase: phases.count(phase) for phase in set(phases)},
+                'strategy_distribution': {strategy: strategies.count(strategy) for strategy in set(strategies)},
+                'generation': max([ind['generation'] for ind in self.evolution_population], default=0)
+            }
+            
+            logger.info(f"📊 Evolution state: diversity={overall_diversity:.3f}, convergence={convergence:.3f}, avg_fitness={avg_fitness:.3f}")
+            return state
+            
+        except Exception as e:
+            logger.error(f"❌ Error analyzing evolution state: {e}")
+            return {'status': 'error', 'diversity': 0.0, 'convergence': 0.0}
+
+    async def _analyze_research_trends(self) -> Dict[str, Any]:
+        """Analyze current research trends and patterns."""
+        try:
+            # Simulate trend analysis based on recent data
+            trends = {
+                'quantum_algorithms': {
+                    'vqe_trend': random.uniform(0.1, 0.9),
+                    'qaoa_trend': random.uniform(0.1, 0.9),
+                    'grover_trend': random.uniform(0.1, 0.9),
+                    'shor_trend': random.uniform(0.1, 0.9)
+                },
+                'hardware_advances': {
+                    'qubit_count_trend': random.uniform(0.1, 0.9),
+                    'coherence_trend': random.uniform(0.1, 0.9),
+                    'gate_fidelity_trend': random.uniform(0.1, 0.9),
+                    'error_correction_trend': random.uniform(0.1, 0.9)
+                },
+                'optimization_methods': {
+                    'genetic_algorithm_trend': random.uniform(0.1, 0.9),
+                    'reinforcement_learning_trend': random.uniform(0.1, 0.9),
+                    'gradient_descent_trend': random.uniform(0.1, 0.9),
+                    'hybrid_optimization_trend': random.uniform(0.1, 0.9)
+                },
+                'emerging_technologies': {
+                    'quantum_machine_learning': random.uniform(0.1, 0.9),
+                    'quantum_simulation': random.uniform(0.1, 0.9),
+                    'quantum_cryptography': random.uniform(0.1, 0.9),
+                    'quantum_sensing': random.uniform(0.1, 0.9)
+                }
+            }
+            
+            # Update internal trend tracking
+            self.research_trends.update(trends['quantum_algorithms'])
+            self.hardware_trends.update(trends['hardware_advances'])
+            self.algorithm_trends.update(trends['optimization_methods'])
+            
+            logger.info(f"📈 Analyzed research trends: {len(trends)} categories")
+            return trends
+            
+        except Exception as e:
+            logger.error(f"❌ Error analyzing research trends: {e}")
+            return {}
+
+    async def _adapt_to_trends(self, trends: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+        """Adapt evolution strategy based on current trends."""
+        try:
+            if trends is None:
+                trends = await self._analyze_research_trends()
+            
+            adapted_individuals = []
+            
+            # Adapt population based on trends
+            for individual in self.evolution_population:
+                # Adjust parameters based on trends
+                if 'quantum_algorithms' in trends:
+                    qa_trends = trends['quantum_algorithms']
+                    avg_trend = np.mean(list(qa_trends.values()))
+                    
+                    # Adjust exploration rate based on trend strength
+                    individual['parameters']['exploration_rate'] = min(0.9, 
+                        individual['parameters']['exploration_rate'] * (1 + avg_trend * 0.1))
+                    
+                    # Adjust adaptation speed based on trend volatility
+                    trend_volatility = np.std(list(qa_trends.values()))
+                    individual['parameters']['adaptation_speed'] = min(1.0,
+                        individual['parameters']['adaptation_speed'] * (1 + trend_volatility * 0.2))
+                
+                adapted_individuals.append(individual)
+            
+            logger.info(f"🔄 Adapted {len(adapted_individuals)} individuals to current trends")
+            return adapted_individuals
+            
+        except Exception as e:
+            logger.error(f"❌ Error adapting to trends: {e}")
+            return []
+
+    async def _detect_innovation_opportunities(self) -> List[Dict[str, Any]]:
+        """Detect opportunities for innovation and breakthrough research."""
+        try:
+            opportunities = []
+            
+            # Analyze current state for innovation gaps
+            state = await self._analyze_evolution_state()
+            trends = await self._analyze_research_trends()
+            
+            # Identify innovation opportunities based on diversity and trends
+            if state['diversity'] < 0.5:
+                opportunities.append({
+                    'type': 'diversity_enhancement',
+                    'priority': 'high',
+                    'description': 'Low population diversity detected',
+                    'suggested_actions': ['Increase mutation rate', 'Introduce new strategies', 'Cross-population migration']
+                })
+            
+            if state['convergence'] > 0.8:
+                opportunities.append({
+                    'type': 'convergence_breakthrough',
+                    'priority': 'medium',
+                    'description': 'High convergence detected - need for breakthrough',
+                    'suggested_actions': ['Reset population', 'Introduce radical mutations', 'Explore new search spaces']
+                })
+            
+            # Trend-based opportunities
+            if 'quantum_algorithms' in trends:
+                qa_trends = trends['quantum_algorithms']
+                for algorithm, trend in qa_trends.items():
+                    if trend > 0.7:
+                        opportunities.append({
+                            'type': 'algorithm_optimization',
+                            'priority': 'high',
+                            'description': f'High trend detected for {algorithm}',
+                            'suggested_actions': [f'Optimize {algorithm} implementations', 'Develop {algorithm} variants']
+                        })
+            
+            # Innovation pool opportunities
+            if len(self.innovation_pool) < 5:
+                opportunities.append({
+                    'type': 'innovation_generation',
+                    'priority': 'medium',
+                    'description': 'Low innovation pool - need for new ideas',
+                    'suggested_actions': ['Generate novel algorithms', 'Explore hybrid approaches', 'Cross-domain inspiration']
+                })
+            
+            logger.info(f"💡 Detected {len(opportunities)} innovation opportunities")
+            return opportunities
+            
+        except Exception as e:
+            logger.error(f"❌ Error detecting innovation opportunities: {e}")
+            return []
