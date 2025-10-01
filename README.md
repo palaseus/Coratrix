@@ -464,7 +464,7 @@ print(f'✅ 20 qubits: {result.shape} - Success!')
 ### Advanced Entanglement Networks
 - **7-Qubit Hybrid Structure**: GHZ (0-2) + W (3-5) + Cluster (6) with fault-tolerant CNOT paths
 - **Advanced 7-Qubit Hybrid Network** (`research/advanced_7qubit_hybrid_network.py`): Complete implementation with error mitigation
-- **High-Performance 7-Qubit Network** (`research/god_tier_7qubit_network.py`): 99.08% entropy optimization with parameter optimization
+- **High-Performance 7-Qubit Network** (`research/quantum_7qubit_network.py`): 99.08% entropy optimization with parameter optimization
 - **Corrected Physics Network** (`research/corrected_physics_network.py`): Fixed entanglement metrics with proper calculations
 - **Teleportation Cascade**: Multi-step teleportation with error mitigation and purification gates
 - **Parallel Subspace Search**: Concurrent Grover search across GHZ/W/Cluster subspaces with ≥3.5 thresholds
@@ -1162,14 +1162,6 @@ This project is open source and available under the MIT License.
 - **Quantum Circuit Synthesis**: AI-generated optimal quantum circuits
 - **Automated Error Correction**: Machine learning-based error mitigation
 - **Quantum Algorithm Discovery**: AI-assisted quantum algorithm development
-
-## 💰 Funding & Sustainability
-
-### **Support Coratrix Development**
-- **GitHub Sponsors**: [Sponsor Coratrix on GitHub](https://github.com/sponsors/coratrix)
-- **Corporate Sponsors**: IBM, Google, Microsoft, Amazon, and Intel
-- **Research Grants**: NSF, DOE, and EU Horizon 2020 funding
-- **Community Donations**: OpenCollective and Patreon support
 
 ### **Contributing**
 We welcome contributions from the global quantum computing community:

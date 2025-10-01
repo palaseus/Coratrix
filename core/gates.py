@@ -324,3 +324,180 @@ class CNOTGate(QuantumGate):
                     matrix[i, j] = 0.0
         
         return matrix
+
+
+class RYGate(QuantumGate):
+    """
+    Rotation around Y-axis gate.
+    
+    Matrix representation:
+    RY(θ) = [cos(θ/2)  -sin(θ/2)]
+            [sin(θ/2)   cos(θ/2)]
+    
+    RY(θ)|0⟩ = cos(θ/2)|0⟩ + sin(θ/2)|1⟩
+    RY(θ)|1⟩ = -sin(θ/2)|0⟩ + cos(θ/2)|1⟩
+    """
+    
+    def __init__(self, angle: float):
+        super().__init__("RY")
+        self.angle = angle
+        self.single_qubit_matrix = np.array([
+            [np.cos(angle/2), -np.sin(angle/2)],
+            [np.sin(angle/2), np.cos(angle/2)]
+        ], dtype=complex)
+    
+    def get_matrix(self, num_qubits: int, target_qubits: List[int]) -> np.ndarray:
+        """Get the RY gate matrix for the specified qubits."""
+        if len(target_qubits) != 1:
+            raise ValueError("RY gate acts on exactly one qubit")
+        
+        return self._build_full_matrix(num_qubits, target_qubits[0], self.single_qubit_matrix)
+    
+    def _build_full_matrix(self, num_qubits: int, target_qubit: int, gate_matrix: np.ndarray) -> np.ndarray:
+        """Build the full matrix for a single-qubit gate."""
+        dimension = 2 ** num_qubits
+        full_matrix = np.eye(dimension, dtype=complex)
+        
+        for i in range(dimension):
+            for j in range(dimension):
+                if self._should_apply_gate(i, j, target_qubit, num_qubits):
+                    qubit_i = (i >> (num_qubits - 1 - target_qubit)) & 1
+                    qubit_j = (j >> (num_qubits - 1 - target_qubit)) & 1
+                    full_matrix[i, j] = gate_matrix[qubit_i, qubit_j]
+        
+        return full_matrix
+    
+    def _should_apply_gate(self, i: int, j: int, target_qubit: int, num_qubits: int) -> bool:
+        """Check if the gate should be applied between states i and j."""
+        for q in range(num_qubits):
+            if q != target_qubit:
+                bit_i = (i >> (num_qubits - 1 - q)) & 1
+                bit_j = (j >> (num_qubits - 1 - q)) & 1
+                if bit_i != bit_j:
+                    return False
+        return True
+
+
+class RZGate(QuantumGate):
+    """
+    Rotation around Z-axis gate.
+    
+    Matrix representation:
+    RZ(θ) = [e^(-iθ/2)     0    ]
+            [0        e^(iθ/2)]
+    
+    RZ(θ)|0⟩ = e^(-iθ/2)|0⟩
+    RZ(θ)|1⟩ = e^(iθ/2)|1⟩
+    """
+    
+    def __init__(self, angle: float):
+        super().__init__("RZ")
+        self.angle = angle
+        self.single_qubit_matrix = np.array([
+            [np.exp(-1j * angle/2), 0],
+            [0, np.exp(1j * angle/2)]
+        ], dtype=complex)
+    
+    def get_matrix(self, num_qubits: int, target_qubits: List[int]) -> np.ndarray:
+        """Get the RZ gate matrix for the specified qubits."""
+        if len(target_qubits) != 1:
+            raise ValueError("RZ gate acts on exactly one qubit")
+        
+        return self._build_full_matrix(num_qubits, target_qubits[0], self.single_qubit_matrix)
+    
+    def _build_full_matrix(self, num_qubits: int, target_qubit: int, gate_matrix: np.ndarray) -> np.ndarray:
+        """Build the full matrix for a single-qubit gate."""
+        dimension = 2 ** num_qubits
+        full_matrix = np.eye(dimension, dtype=complex)
+        
+        for i in range(dimension):
+            for j in range(dimension):
+                if self._should_apply_gate(i, j, target_qubit, num_qubits):
+                    qubit_i = (i >> (num_qubits - 1 - target_qubit)) & 1
+                    qubit_j = (j >> (num_qubits - 1 - target_qubit)) & 1
+                    full_matrix[i, j] = gate_matrix[qubit_i, qubit_j]
+        
+        return full_matrix
+    
+    def _should_apply_gate(self, i: int, j: int, target_qubit: int, num_qubits: int) -> bool:
+        """Check if the gate should be applied between states i and j."""
+        for q in range(num_qubits):
+            if q != target_qubit:
+                bit_i = (i >> (num_qubits - 1 - q)) & 1
+                bit_j = (j >> (num_qubits - 1 - q)) & 1
+                if bit_i != bit_j:
+                    return False
+        return True
+
+
+class CZGate(QuantumGate):
+    """
+    Controlled-Z gate (CZ).
+    
+    Matrix representation (for qubits 0 and 1):
+    CZ = [1 0  0  0]
+         [0 1  0  0]
+         [0 0  1  0]
+         [0 0  0 -1]
+    
+    CZ|00⟩ = |00⟩, CZ|01⟩ = |01⟩, CZ|10⟩ = |10⟩, CZ|11⟩ = -|11⟩
+    Applies a phase flip to the target qubit if the control qubit is |1⟩.
+    """
+    
+    def __init__(self):
+        super().__init__("CZ")
+    
+    def get_matrix(self, num_qubits: int, target_qubits: List[int]) -> np.ndarray:
+        """Get the CZ gate matrix for the specified qubits."""
+        if len(target_qubits) != 2:
+            raise ValueError("CZ gate acts on exactly two qubits")
+        
+        control_qubit, target_qubit = target_qubits[0], target_qubits[1]
+        dimension = 2 ** num_qubits
+        matrix = np.eye(dimension, dtype=complex)
+        
+        # Apply CZ logic: phase flip target if control is |1⟩
+        for i in range(dimension):
+            for j in range(dimension):
+                # Check if control qubit is |1⟩ in both states
+                control_i = (i >> (num_qubits - 1 - control_qubit)) & 1
+                control_j = (j >> (num_qubits - 1 - control_qubit)) & 1
+                
+                if control_i == 1 and control_j == 1:
+                    # Control is |1⟩, so target should have phase flip
+                    target_i = (i >> (num_qubits - 1 - target_qubit)) & 1
+                    target_j = (j >> (num_qubits - 1 - target_qubit)) & 1
+                    
+                    # Check if target is the same and other qubits are the same
+                    if target_i == target_j:
+                        # Check that all other qubits are the same
+                        same_other_qubits = True
+                        for q in range(num_qubits):
+                            if q != control_qubit and q != target_qubit:
+                                bit_i = (i >> (num_qubits - 1 - q)) & 1
+                                bit_j = (j >> (num_qubits - 1 - q)) & 1
+                                if bit_i != bit_j:
+                                    same_other_qubits = False
+                                    break
+                        
+                        if same_other_qubits:
+                            # Apply phase flip if target is |1⟩
+                            if target_i == 1:
+                                matrix[i, j] = -1.0
+                            else:
+                                matrix[i, j] = 1.0
+                        else:
+                            matrix[i, j] = 0.0
+                    else:
+                        matrix[i, j] = 0.0
+                elif control_i == control_j:
+                    # Control qubit is the same in both states
+                    # Check if all qubits are the same
+                    if i == j:
+                        matrix[i, j] = 1.0
+                    else:
+                        matrix[i, j] = 0.0
+                else:
+                    matrix[i, j] = 0.0
+        
+        return matrix

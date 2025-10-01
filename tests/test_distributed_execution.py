@@ -2,7 +2,7 @@
 Test Suite for Distributed Execution Layer
 =========================================
 
-This test suite validates the GOD-TIER Distributed Execution Layer
+This test suite validates the Distributed Execution Layer
 that enables quantum circuits to be executed across multiple nodes.
 
 Tests cover:
@@ -19,6 +19,7 @@ import unittest
 import asyncio
 import time
 import numpy as np
+import pytest
 from typing import Dict, List, Any
 import sys
 import os
@@ -184,6 +185,7 @@ class TestDistributedExecution(unittest.TestCase):
         
         print("  ✅ Execution Graph node management validated")
     
+    @pytest.mark.asyncio
     async def test_circuit_partitioning(self):
         """Test circuit partitioning."""
         print("\n🌐 Testing Circuit Partitioning...")
@@ -221,6 +223,7 @@ class TestDistributedExecution(unittest.TestCase):
         
         print("  ✅ Circuit Partitioning validated")
     
+    @pytest.mark.asyncio
     async def test_circuit_execution(self):
         """Test circuit execution."""
         print("\n🌐 Testing Circuit Execution...")
@@ -264,6 +267,7 @@ class TestDistributedExecution(unittest.TestCase):
         
         print("  ✅ Circuit Execution validated")
     
+    @pytest.mark.asyncio
     async def test_rpc_communication(self):
         """Test RPC communication."""
         print("\n🌐 Testing RPC Communication...")
@@ -301,6 +305,7 @@ class TestDistributedExecution(unittest.TestCase):
         
         print("  ✅ RPC Communication validated")
     
+    @pytest.mark.asyncio
     async def test_state_sharding_operations(self):
         """Test state sharding operations."""
         print("\n🌐 Testing State Sharding Operations...")
@@ -438,6 +443,7 @@ class TestDistributedExecution(unittest.TestCase):
         
         print("  ✅ Execution Recommendations validated")
     
+    @pytest.mark.asyncio
     async def test_integration_performance(self):
         """Test integration and performance."""
         print("\n⚡ Testing Integration and Performance...")
@@ -529,7 +535,7 @@ def run_distributed_execution_tests():
     asyncio.run(run_async_tests())
     
     print("\n🎉 DISTRIBUTED EXECUTION LAYER TEST SUITE COMPLETED!")
-    print("The GOD-TIER Distributed Execution Layer is fully validated!")
+    print("The Distributed Execution Layer is fully validated!")
 
 if __name__ == "__main__":
     run_distributed_execution_tests()

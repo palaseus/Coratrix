@@ -11,7 +11,7 @@ This enables:
 - Dynamic resource allocation based on circuit complexity
 - Real-time optimization of execution paths
 
-This is the GOD-TIER capability that makes Coratrix feel alive.
+This is the capability that makes Coratrix feel alive.
 """
 
 import time
@@ -100,7 +100,7 @@ class CircuitPartitioner:
         """
         Partition a quantum circuit for hot-swap execution.
         
-        This is the GOD-TIER partitioning method that intelligently
+        This is the partitioning method that intelligently
         identifies optimal swap points based on circuit characteristics.
         """
         gates = circuit_data.get('gates', [])
@@ -542,7 +542,7 @@ class HotSwapExecutor:
         """
         Execute a circuit with hot-swap capabilities.
         
-        This is the GOD-TIER execution method that enables mid-circuit
+        This is the execution method that enables mid-circuit
         backend switching for optimal performance.
         """
         execution_id = f"hotswap_{int(time.time() * 1000)}"

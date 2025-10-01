@@ -2,7 +2,7 @@
 Test Suite for Real-Time Quantum Circuit Visualizer
 ==================================================
 
-This test suite validates the GOD-TIER Real-Time Quantum Circuit Visualizer
+This test suite validates the Real-Time Quantum Circuit Visualizer
 that provides immersive visualization of quantum circuit execution.
 
 Tests cover:
@@ -32,7 +32,7 @@ from viz.entanglement_heatmap import EntanglementHeatmap, HeatmapConfig, Heatmap
 from viz.quantum_debugger import QuantumDebugger, DebugMode, BreakpointType
 from viz.circuit_renderer import CircuitRenderer, CircuitStyle, RenderQuality
 from viz.state_visualizer import StateVisualizer
-from viz.performance_monitor import PerformanceMonitor, MetricType
+from viz.performance_monitor import VizPerformanceMonitor as PerformanceMonitor, MetricType
 from viz.interactive_controls import InteractiveControls, ControlType
 
 class TestRealtimeVisualizer(unittest.TestCase):
@@ -658,7 +658,7 @@ def run_realtime_visualizer_tests():
     asyncio.run(run_async_tests())
     
     print("\n🎉 REAL-TIME QUANTUM CIRCUIT VISUALIZER TEST SUITE COMPLETED!")
-    print("The GOD-TIER Real-Time Quantum Circuit Visualizer is fully validated!")
+    print("The Real-Time Quantum Circuit Visualizer is fully validated!")
 
 if __name__ == "__main__":
     run_realtime_visualizer_tests()

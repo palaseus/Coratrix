@@ -216,3 +216,65 @@ class CNOTGate(QuantumGate):
                 matrix[i, i] = 1
         
         return matrix
+
+
+class RYGate(QuantumGate):
+    """Rotation around Y-axis gate."""
+    
+    def __init__(self, angle: float):
+        super().__init__("RY")
+        self.angle = angle
+    
+    def get_matrix(self, num_qubits: int, target_qubits: List[int]) -> 'np.ndarray':
+        import numpy as np
+        dim = 2 ** num_qubits
+        matrix = np.eye(dim, dtype=complex)
+        
+        # Apply RY gate to target qubit
+        target_qubit = target_qubits[0]
+        cos_angle = np.cos(self.angle / 2)
+        sin_angle = np.sin(self.angle / 2)
+        
+        for i in range(dim):
+            target_bit = (i >> (num_qubits - 1 - target_qubit)) & 1
+            
+            if target_bit == 0:  # |0⟩ state
+                # |0⟩ -> cos(θ/2)|0⟩ + sin(θ/2)|1⟩
+                matrix[i, i] = cos_angle
+                flipped = i ^ (1 << (num_qubits - 1 - target_qubit))
+                matrix[i, flipped] = sin_angle
+            else:  # |1⟩ state
+                # |1⟩ -> -sin(θ/2)|0⟩ + cos(θ/2)|1⟩
+                matrix[i, i] = cos_angle
+                flipped = i ^ (1 << (num_qubits - 1 - target_qubit))
+                matrix[i, flipped] = -sin_angle
+        
+        return matrix
+
+
+class RZGate(QuantumGate):
+    """Rotation around Z-axis gate."""
+    
+    def __init__(self, angle: float):
+        super().__init__("RZ")
+        self.angle = angle
+    
+    def get_matrix(self, num_qubits: int, target_qubits: List[int]) -> 'np.ndarray':
+        import numpy as np
+        dim = 2 ** num_qubits
+        matrix = np.eye(dim, dtype=complex)
+        
+        # Apply RZ gate to target qubit
+        target_qubit = target_qubits[0]
+        exp_plus = np.exp(1j * self.angle / 2)
+        exp_minus = np.exp(-1j * self.angle / 2)
+        
+        for i in range(dim):
+            target_bit = (i >> (num_qubits - 1 - target_qubit)) & 1
+            
+            if target_bit == 0:  # |0⟩ state
+                matrix[i, i] = exp_minus
+            else:  # |1⟩ state
+                matrix[i, i] = exp_plus
+        
+        return matrix

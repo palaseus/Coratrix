@@ -7,7 +7,7 @@ an evolving knowledge base of optimizations, backend behaviors, and
 circuit patterns, generates periodic autonomous reports with recommended
 upgrades, predicted resource allocations, and experimental results.
 
-This is the GOD-TIER learning intelligence that makes Coratrix
+This is the learning intelligence that makes Coratrix
 truly self-improving and adaptive.
 """
 
@@ -91,7 +91,7 @@ class LearningReport:
 
 class ContinuousLearningSystem:
     """
-    GOD-TIER Continuous Learning System for Autonomous Knowledge Evolution.
+    Continuous Learning System for Autonomous Knowledge Evolution.
     
     This system continuously learns from system behavior, performance data,
     and experimental results to build an evolving knowledge base that
@@ -139,7 +139,7 @@ class ContinuousLearningSystem:
         self.knowledge_thread = None
         
         logger.info(f"🧠 Continuous Learning System initialized (ID: {self.learning_id})")
-        logger.info("🚀 GOD-TIER learning intelligence active")
+        logger.info("🚀 Learning intelligence active")
     
     async def start(self):
         """Start the continuous learning system."""

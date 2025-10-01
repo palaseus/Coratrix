@@ -7,7 +7,7 @@ optimal qubit mappings, entanglement patterns, and partitioning schemes,
 suggests improvements to compiler passes and transpilation heuristics,
 and identifies underutilized execution paths across all backends.
 
-This is the GOD-TIER strategic intelligence that makes Coratrix
+This is the strategic intelligence that makes Coratrix
 truly quantum-native in its optimization approach.
 """
 
@@ -95,7 +95,7 @@ class StrategyRecommendation:
 
 class QuantumStrategyAdvisor:
     """
-    GOD-TIER Quantum Strategy Advisor for Autonomous Quantum Optimization.
+    Quantum Strategy Advisor for Autonomous Quantum Optimization.
     
     This advisor provides strategic recommendations for quantum circuit
     optimization, qubit mapping, entanglement patterns, and backend
@@ -131,7 +131,7 @@ class QuantumStrategyAdvisor:
         self.analysis_thread = None
         
         logger.info(f"🎯 Quantum Strategy Advisor initialized (ID: {self.advisor_id})")
-        logger.info("🚀 GOD-TIER quantum strategic intelligence active")
+        logger.info("🚀 Quantum strategic intelligence active")
     
     async def start(self):
         """Start the quantum strategy advisor."""

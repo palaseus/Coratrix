@@ -41,7 +41,7 @@ from visualization.probability_heatmap import ProbabilityHeatmap
 from visualization.circuit_diagram import CircuitDiagram
 
 
-class AdvancedEntanglementNetwork:
+class Quantum7QubitNetwork:
     """
     Advanced 7-Qubit Hybrid Entanglement Network.
     

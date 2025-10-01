@@ -11,7 +11,7 @@ Coratrix into a self-evolving, predictive quantum operating system capable of:
 - Autonomous analytics and telemetry
 - Experimental expansion and continuous learning
 
-This is the GOD-TIER autonomous intelligence system that makes Coratrix
+This is the autonomous intelligence system that makes Coratrix
 truly alive and self-optimizing.
 """
 

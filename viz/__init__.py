@@ -5,7 +5,7 @@ Coratrix 4.0 Quantum OS - Real-Time Quantum Circuit Visualizer
 The Real-Time Quantum Circuit Visualizer provides immersive visualization
 of quantum circuit execution with WebGL/WASM-based rendering.
 
-This is the GOD-TIER visualization system that transforms quantum
+This is the visualization system that transforms quantum
 circuit execution into an interactive, real-time experience.
 
 Key Features:

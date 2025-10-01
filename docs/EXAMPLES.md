@@ -177,10 +177,10 @@ print("Subspace search completed")
 ### 10. High-Performance Entanglement Optimization
 
 ```python
-from research.god_tier_7qubit_network import GodTier7QubitNetwork
+from research.quantum_7qubit_network import Quantum7QubitNetwork
 
 # Initialize high-performance network
-network = GodTier7QubitNetwork(num_qubits=7)
+network = Quantum7QubitNetwork(num_qubits=7)
 
 # Optimize entanglement parameters
 optimization = network.optimize_entanglement_parameters()

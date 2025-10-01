@@ -6,7 +6,7 @@ This module implements the predictive orchestration system that forecasts
 optimal backend allocation across nodes, minimizes latency and cost,
 and dynamically adapts routing strategies based on performance telemetry.
 
-This is the GOD-TIER predictive intelligence that makes Coratrix
+This is the predictive intelligence that makes Coratrix
 truly autonomous in its execution decisions.
 """
 
@@ -96,7 +96,7 @@ class PerformancePrediction:
 
 class PredictiveOrchestrator:
     """
-    GOD-TIER Predictive Orchestrator for Autonomous Backend Allocation.
+    Predictive Orchestrator for Autonomous Backend Allocation.
     
     This orchestrator uses machine learning and predictive analytics to
     forecast optimal backend allocation, minimize latency and cost,
@@ -140,7 +140,7 @@ class PredictiveOrchestrator:
         self._initialize_default_backends()
         
         logger.info(f"🎯 Predictive Orchestrator initialized (ID: {self.orchestrator_id})")
-        logger.info("🚀 GOD-TIER predictive intelligence active")
+        logger.info("🚀 Predictive intelligence active")
     
     async def start(self):
         """Start the predictive orchestrator."""
@@ -302,7 +302,7 @@ class PredictiveOrchestrator:
         """
         Predict the optimal backend for a quantum circuit.
         
-        This is the GOD-TIER method that uses machine learning to predict
+        This is the method that uses machine learning to predict
         the best backend allocation for any quantum circuit.
         """
         decision_id = f"route_{int(time.time() * 1000)}"

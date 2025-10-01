@@ -7,7 +7,7 @@ and tests new circuit optimization passes autonomously, proposes novel
 algorithmic strategies, and applies reinforcement learning to improve
 execution efficiency, cost reduction, and error minimization.
 
-This is the GOD-TIER self-evolving intelligence that makes Coratrix
+This is the self-evolving intelligence that makes Coratrix
 continuously improve itself.
 """
 
@@ -88,7 +88,7 @@ class EvolutionGeneration:
 
 class SelfEvolvingOptimizer:
     """
-    GOD-TIER Self-Evolving Optimizer for Autonomous Circuit Optimization.
+    Self-Evolving Optimizer for Autonomous Circuit Optimization.
     
     This optimizer continuously evolves new optimization strategies using
     genetic algorithms, reinforcement learning, and neural evolution to
@@ -137,7 +137,7 @@ class SelfEvolvingOptimizer:
         self.learning_thread = None
         
         logger.info(f"🧬 Self-Evolving Optimizer initialized (ID: {self.optimizer_id})")
-        logger.info("🚀 GOD-TIER evolutionary intelligence active")
+        logger.info("🚀 Evolutionary intelligence active")
     
     def _initialize_action_space(self):
         """Initialize the action space for reinforcement learning."""

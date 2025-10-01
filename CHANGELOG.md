@@ -797,7 +797,7 @@ python3 demo_sparse_tensor_engine.py
   - Enhanced subspace search with ≥3.5 thresholds
   - **High Performance**: All objectives achieved with comprehensive validation
 
-- **High-Performance 7-Qubit Network** (`research/god_tier_7qubit_network.py`)
+- **High-Performance 7-Qubit Network** (`research/quantum_7qubit_network.py`)
   - 99.08% entropy optimization with parameter optimization
   - Advanced parameter optimization with adaptive noise injection
   - Real-time monitoring and dynamic parameter adjustment
@@ -833,7 +833,7 @@ python3 demo_sparse_tensor_engine.py
   - Enhanced subspace search with ≥3.5 thresholds
   - **High Performance**: All objectives achieved with comprehensive validation
 
-- **High-Performance 7-Qubit Network** (`research/god_tier_7qubit_network.py`)
+- **High-Performance 7-Qubit Network** (`research/quantum_7qubit_network.py`)
   - 99.08% entropy optimization with parameter optimization
   - Advanced parameter optimization with adaptive noise injection
   - Real-time monitoring and dynamic parameter adjustment
