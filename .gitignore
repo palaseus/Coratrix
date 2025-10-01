@@ -259,3 +259,39 @@ plugins/
 # Test artifacts
 test_modular_sdk.py
 test_clean.py
+
+# Quantum Research Engine test outputs
+quantum_research_test_results/
+quantum_research_test_outputs/
+quantum_research_test_logs/
+quantum_research_test_reports/
+
+# Comprehensive testing outputs
+comprehensive_test_results/
+comprehensive_test_outputs/
+comprehensive_test_logs/
+comprehensive_test_reports/
+
+# Advanced stress testing outputs
+stress_test_results/
+stress_test_outputs/
+stress_test_logs/
+stress_test_reports/
+
+# Integration testing outputs
+integration_test_results/
+integration_test_outputs/
+integration_test_logs/
+integration_test_reports/
+
+# Master test runner outputs
+master_test_results/
+master_test_outputs/
+master_test_logs/
+master_test_reports/
+
+# Final comprehensive test outputs
+final_test_results/
+final_test_outputs/
+final_test_logs/
+final_test_reports/
